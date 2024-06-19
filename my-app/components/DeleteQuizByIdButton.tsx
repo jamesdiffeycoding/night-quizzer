@@ -9,7 +9,7 @@ export default function DeleteQuizByIDButton({quizId, userId}) {
 
   const handleDelete = () => {
     setDebug("Function called")
-    fetch(`/delete/${quizId}`, {
+    fetch(`/deleteAPI/${quizId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
