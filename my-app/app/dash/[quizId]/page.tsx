@@ -1,9 +1,13 @@
 import AuthButton from "@/components/AuthButton";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import { useEffect } from "react";
+import DeleteQuizByIDButton from "@/components/DeleteQuizByIdButton";
 
 export default async function DashPage({params}) {
   const quizId = params.quizId
+
+
   const supabase = createClient();
   const {
     data: { user },
@@ -13,7 +17,8 @@ export default async function DashPage({params}) {
   }
   const { data: notes } = await supabase.from('notes').select()
 
-  const { data: quizzes } = await supabase.from('quizzes').select().eq('private', 'false')
+  const { data: quizzes } = await supabase.from('quizzes').select().eq('private', 'false').eq('id', `${quizId}`).eq('user_id', `${user.id}`)
+
 
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
@@ -34,6 +39,11 @@ export default async function DashPage({params}) {
         {/* <Header /> */}
         {/* <h2>Row level security disabled</h2> */}
         {/* <pre>{JSON.stringify(notes, null, 2)}</pre> */}
+        { quizzes.length !==0 ? 
+          <DeleteQuizByIDButton quizId={quizId} userId={user.Id}></DeleteQuizByIDButton> : <></>
+        }
+        {/* <button className="deleteQuizByIdBtn" style={{color:"red"}}>DELETE THIS QUIZ</button> */}
+
         <h2>Row level security enabled</h2>
         <pre>{JSON.stringify(quizzes, null, 2)}</pre>
         <main className="flex-1 flex flex-col gap-6">
