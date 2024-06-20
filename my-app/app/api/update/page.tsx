@@ -2,7 +2,7 @@ import AuthButton from "@/components/AuthButton";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
-export default async function DeleteAPI() {
+export default async function UpdateAPI() {
   const supabase = createClient();
   const {
     data: { user },
@@ -21,7 +21,7 @@ export default async function DeleteAPI() {
         <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
           <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
             {/* <DeployButton /> */}
-            <h1>DELETE QUIZ PAGE</h1>
+            <h1>UPDATE QUIZ PAGE</h1>
             <AuthButton />
           </div>
         </nav>

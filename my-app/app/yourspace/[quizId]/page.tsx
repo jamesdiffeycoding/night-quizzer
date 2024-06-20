@@ -1,8 +1,10 @@
 import AuthButton from "@/components/AuthButton";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-
-export default async function YourSpacePage() {
+import UpdateQuizByIdButton from "@/components/UpdateQuizByIdButton";
+import DeleteQuizByIDButton from "@/components/DeleteQuizByIdButton";
+export default async function YourSpacePage({params}) {
+    let quizId = params.quizId
   const supabase = createClient();
   const {
     data: { user },
@@ -12,7 +14,9 @@ export default async function YourSpacePage() {
   }
   const { data: notes } = await supabase.from('notes').select()
 
-  const { data: quizzes } = await supabase.from('quizzes').select().eq('user_id', `${user.id}`)
+  /* QUIZ FETCH REQUIREMENT: can be from any user id as long as it is NOT private */
+  const { data: quizzes } = await supabase.from('quizzes').select().eq('private', 'false').eq('id', `${quizId}`)
+
 
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
@@ -30,13 +34,24 @@ export default async function YourSpacePage() {
           </div>
         </nav>
       </div>
-
+        {/* CONDITION FOR DELETE BUTTON: quiz exists & is owned by user */}        
+        { quizzes.length !==0 && quizzes[0].user_id===user.id ? 
+          <DeleteQuizByIDButton quizId={quizId} userId={user.id}></DeleteQuizByIDButton> : <></>
+        }
+        {/* CONDITION FOR UPDATE BUTTON: quiz exists & is owned by user */}        
+        { quizzes.length !==0 && quizzes[0].user_id===user.id ? 
+          <UpdateQuizByIdButton quizId={quizId} name="abcc" description="def" questions="ghi"></UpdateQuizByIdButton> : <></>
+        }
+        <h2>Row level security enabled</h2>
+        {/* CONDITION FOR SHOWING QUIZ: it exists */}        
+        { quizzes.length !==0 ? 
+                  <pre>{JSON.stringify(quizzes, null, 2)}</pre> : <div>This quiz either no longer exists, or you do not have permission to view it.</div>
+        }
       <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3">
         {/* <Header /> */}
         {/* <h2>Row level security disabled</h2> */}
         {/* <pre>{JSON.stringify(notes, null, 2)}</pre> */}
         <h2>Row level security enabled</h2>
-        <pre>{JSON.stringify(quizzes, null, 2)}</pre>
         <main className="flex-1 flex flex-col gap-6">
           {/* <h2 className="font-bold text-4xl mb-4">Next steps</h2> */}
           {/* <FetchDataSteps /> */}

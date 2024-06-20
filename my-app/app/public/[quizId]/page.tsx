@@ -7,7 +7,6 @@ import DeleteQuizByIDButton from "@/components/DeleteQuizByIdButton";
 export default async function DashPage({params}) {
   const quizId = params.quizId
   
-  
   const supabase = createClient();
   const {
     data: { user },

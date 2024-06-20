@@ -3,7 +3,14 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
 export default async function DeleteAPI({params}) {
-  const quizId = params.quizId
+  const quizId=params.updateInformation.split("___")[0]
+  const name=params.updateInformation.split("___")[1]
+  const questions=params.updateInformation.split("___")[2]
+  const description=params.updateInformation.split("___")[3]
+  console.log("Hello")
+  console.log(name, description, questions)
+
+
   const supabase = createClient();
   const {
     data: { user },
@@ -11,9 +18,15 @@ export default async function DeleteAPI({params}) {
   if (!user) {
     return redirect("/login");
   }
-  if (quizId>=4) {
-      const response = await supabase.from('quizzes').delete().eq('id', `${quizId}`).eq('user_id', `${user.id}`)
-  }  
+  const { data, error } = await supabase.from('quizzes')
+  .update({ 
+      name: name,
+      description: description,
+      questions: [questions]
+  })
+  .eq('id', quizId)
+  .eq('user_id', user.id);
+
 
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
@@ -25,7 +38,7 @@ export default async function DeleteAPI({params}) {
         <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
           <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
             {/* <DeployButton /> */}
-            <h1>DELETE QUIZ PAGE</h1>
+            <h1>UPDATE QUIZ PAGE</h1>
             <AuthButton />
           </div>
         </nav>
