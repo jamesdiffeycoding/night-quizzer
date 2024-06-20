@@ -14,8 +14,6 @@ export default async function DashPage() {
 
   const { data: quizzes } = await supabase.from('quizzes').select().eq('private', 'false')
 
-  const response = await supabase.from('countries').delete().eq('id', `4`).eq('user_id', `${user.id}`)
-
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
       <div className="w-full">

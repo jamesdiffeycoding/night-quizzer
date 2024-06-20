@@ -1,38 +1,51 @@
-import DeployButton from "../components/DeployButton";
-import AuthButton from "../components/AuthButton";
+import AuthButton from "@/components/AuthButton";
 import { createClient } from "@/utils/supabase/server";
-import ConnectSupabaseSteps from "@/components/tutorial/ConnectSupabaseSteps";
-import SignUpUserSteps from "@/components/tutorial/SignUpUserSteps";
-import Header from "@/components/Header";
+import { redirect } from "next/navigation";
 
-export default async function Index() {
-  const canInitSupabaseClient = () => {
-    // This function is just for the interactive tutorial.
-    // Feel free to remove it once you have Supabase connected.
-    try {
-      createClient();
-      return true;
-    } catch (e) {
-      return false;
-    }
-  };
+export default async function DashPage() {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return redirect("/login");
+  }
+  // FETCH QUIZ IDs TO FIND NUMBER OF QUIZZES MADE
+const { data: quizFinalId } = await supabase.from('quizzes').select('*').order('id', { ascending: false }).limit(1);
+let totalQuizNumber = quizFinalId[0].id
 
-  const isSupabaseConnected = canInitSupabaseClient();
 
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
-      <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-        <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
-          <DeployButton />
-          {isSupabaseConnected && <AuthButton />}
+      <div className="w-full">
+        <div className="py-6 font-bold bg-purple-950 text-center">
+          This is a protected page that you can only see as an authenticated
+          user
         </div>
-      </nav>
+        <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
+          <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
+            {/* <DeployButton /> */}
+            <h1>DARK QUIZZER</h1>
+            <AuthButton />
+          </div>
+        </nav>
+      </div>
 
       <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3">
-        <Header />
+        {/* <Header /> */}
+        {/* <h2>Row level security disabled</h2> */}
+        {/* <pre>{JSON.stringify(notes, null, 2)}</pre> */}
+        <h2>JOIN THE REVOLUTION</h2>
+        <div>{totalQuizNumber} quizzes have been made so far.</div>
+        <div>Join us at dark-quizzer.</div>
+        <ul>
+          <li>Create your own free private or public quizzes.</li>
+          <li>Update your quizzes over time.</li>
+          <li>Try other people's quizzes and record your progress.</li>
+        </ul>
         <main className="flex-1 flex flex-col gap-6">
-          <h2 className="font-bold text-4xl mb-4">Next steps</h2>
-          {isSupabaseConnected ? <SignUpUserSteps /> : <ConnectSupabaseSteps />}
+          {/* <h2 className="font-bold text-4xl mb-4">Next steps</h2> */}
+          {/* <FetchDataSteps /> */}
         </main>
       </div>
 
@@ -45,7 +58,7 @@ export default async function Index() {
             className="font-bold hover:underline"
             rel="noreferrer"
           >
-            Supabase
+            Next JS, React, Supabase
           </a>
         </p>
       </footer>

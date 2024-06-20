@@ -45,7 +45,10 @@ export default async function DashPage({params}) {
           <DeleteQuizByIDButton quizId={quizId} userId={user.id}></DeleteQuizByIDButton> : <></>
         }
         <h2>Row level security enabled</h2>
-        <pre>{JSON.stringify(quizzes, null, 2)}</pre>
+        {/* CONDITION FOR SHOWING QUIZ: it exists */}        
+        { quizzes.length !==0 ? 
+                  <pre>{JSON.stringify(quizzes, null, 2)}</pre> : <div>This quiz either no longer exists, or you do not have permission to view it.</div>
+        }
         <main className="flex-1 flex flex-col gap-6">
           {/* <h2 className="font-bold text-4xl mb-4">Next steps</h2> */}
           {/* <FetchDataSteps /> */}
