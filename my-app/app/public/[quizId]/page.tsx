@@ -6,19 +6,19 @@ import DeleteQuizByIDButton from "@/components/DeleteQuizByIdButton";
 
 export default async function DashPage({params}) {
   const quizId = params.quizId
-
-
+  
+  
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  console.log(user)
   if (!user) {
     return redirect("/login");
   }
-  const { data: notes } = await supabase.from('notes').select()
 
-  const { data: quizzes } = await supabase.from('quizzes').select().eq('private', 'false').eq('id', `${quizId}`).eq('user_id', `${user.id}`)
-
+  /* QUIZ FETCH REQUIREMENT: can be from any user id as long as it is NOT private */
+  const { data: quizzes } = await supabase.from('quizzes').select().eq('private', 'false').eq('id', `${quizId}`)
 
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
@@ -39,11 +39,11 @@ export default async function DashPage({params}) {
         {/* <Header /> */}
         {/* <h2>Row level security disabled</h2> */}
         {/* <pre>{JSON.stringify(notes, null, 2)}</pre> */}
-        { quizzes.length !==0 ? 
-          <DeleteQuizByIDButton quizId={quizId} userId={user.Id}></DeleteQuizByIDButton> : <></>
-        }
-        {/* <button className="deleteQuizByIdBtn" style={{color:"red"}}>DELETE THIS QUIZ</button> */}
 
+        {/* CONDITION FOR DELETE BUTTON: quiz exists & is owned by user */}        
+        { quizzes.length !==0 && quizzes[0].user_id===user.id ? 
+          <DeleteQuizByIDButton quizId={quizId} userId={user.id}></DeleteQuizByIDButton> : <></>
+        }
         <h2>Row level security enabled</h2>
         <pre>{JSON.stringify(quizzes, null, 2)}</pre>
         <main className="flex-1 flex flex-col gap-6">
