@@ -4,10 +4,9 @@ import { redirect } from "next/navigation";
 import { useState } from "react";
 
 
-export default function UpdateQuizByIdButton({quizId, name, questions, description}) {
-  const [debug, setDebug] = useState("Default")
-  let updateInformation = `${quizId}___${name}___${questions}___${description}`
-
+export default function UpdateQuizByIdButton({quizId, name, description, questions}) {
+  const [debug, setDebug] = useState("")
+  let updateInformation = `${quizId}___${name}___${description}___${questions}`
   const handleUpdate = () => {
     setDebug("Updating...")
     fetch(`/api/update/${updateInformation}`, {
@@ -38,7 +37,7 @@ export default function UpdateQuizByIdButton({quizId, name, questions, descripti
 
     return (
       <>
-        <button style={{color:"blue"}} onClick={() => {handleUpdate()}}>UPDATE THIS QUIZ</button>
+        <button style={{color:"green"}} onClick={() => {handleUpdate()}}>UPDATE THIS QUIZ</button>
         <div>{debug}</div>
       </>
 

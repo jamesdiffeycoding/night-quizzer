@@ -5,7 +5,7 @@ import { useState } from "react";
 
 
 export default function DeleteQuizByIDButton({quizId, userId}) {
-  const [debug, setDebug] = useState("Default")
+  const [debug, setDebug] = useState("")
 
   const handleDelete = () => {
     setDebug("Deleting...")
