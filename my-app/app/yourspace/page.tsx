@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import QuizCard from "@/components/QuizCard";
+import BannerHeading from "@/components/BannerHeading";
 
 
 export default async function YourSpacePage() {
@@ -15,13 +16,16 @@ export default async function YourSpacePage() {
   const { data: quizzes } = await supabase.from('quizzes').select().eq('user_id', `${user.id}`)
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-20 items-center">
+    <>
+      <BannerHeading heading="Your space"></BannerHeading>
+      <div className="flex-1 w-full flex flex-col gap-20 items-center">
 
-      <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3">
-        <h1>All your quizzes</h1>
-        <QuizCard quizInfo={quizzes}></QuizCard>
+        <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3">
+          <h1>All your quizzes</h1>
+          <QuizCard quizInfo={quizzes}></QuizCard>
+        </div>
+
       </div>
-
-    </div>
+    </>
   );
 }

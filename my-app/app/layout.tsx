@@ -22,7 +22,9 @@ export default function RootLayout({
       <body className="bg-background text-foreground">
         <main className="min-h-screen flex flex-col items-center">
           <TopBar></TopBar>
-          {children}
+          <div className="bg-gray-900 text-white w-full flex-1 flex flex-col items-center">
+            {children}
+          </div>
           <Footer></Footer>
         </main>
       </body>

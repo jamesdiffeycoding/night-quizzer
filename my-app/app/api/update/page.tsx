@@ -8,9 +8,8 @@ export default async function UpdateAPI() {
   } = await supabase.auth.getUser();
   if (!user) {
     return redirect("/login");
-  }  
-
+  } 
   return (
-  <div></div>
+    <div></div>
   );
 }

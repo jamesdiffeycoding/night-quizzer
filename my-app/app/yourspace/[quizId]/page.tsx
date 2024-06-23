@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import UpdateQuizByIdButton from "@/components/UpdateQuizByIdButton";
 import QuizFull from "@/components/QuizFull";
 import DeleteQuizByIDButton from "@/components/DeleteQuizByIdButton";
+import BannerHeading from "@/components/BannerHeading";
 export default async function YourSpacePage({params}) {
     let quizId = params.quizId
   const supabase = createClient();
@@ -20,6 +21,8 @@ export default async function YourSpacePage({params}) {
 
   return (
     <>
+      <BannerHeading heading="Your space"></BannerHeading>
+
       <div className="flex-1 w-full flex flex-col gap-20 items-center">
           {/* CONDITION FOR SHOWING QUIZ: it exists */}        
           { quizInfo.length !==0 ? 

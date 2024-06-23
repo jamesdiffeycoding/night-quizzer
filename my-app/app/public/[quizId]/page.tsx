@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
+import BannerHeading from "@/components/BannerHeading";
 import DeleteQuizByIDButton from "@/components/DeleteQuizByIdButton";
 
 export default async function DashPage({params}) {
@@ -19,6 +20,10 @@ export default async function DashPage({params}) {
   const { data: quizzes } = await supabase.from('quizzes').select().eq('private', 'false').eq('id', `${quizId}`)
 
   return (
-<div></div>
+    <>
+      <BannerHeading heading="All quizzes"></BannerHeading>
+
+      <div></div>
+    </>
   );
 }
