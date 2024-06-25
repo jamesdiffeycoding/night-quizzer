@@ -13,7 +13,6 @@ export default async function YourSpacePage({params}) {
   if (!user) {
     return redirect("/login");
   }
-  const { data: notes } = await supabase.from('notes').select()
 
   /* QUIZ FETCH REQUIREMENT: all your quizes */
   const { data: quizInfo } = await supabase.from('quizzes').select().eq('id', `${quizId}`)
@@ -23,10 +22,10 @@ export default async function YourSpacePage({params}) {
     <>
       <BannerHeading heading="Your space"></BannerHeading>
 
-      <div className="flex-1 w-full flex flex-col gap-20 items-center">
+      <div className="flex-1 w-full flex flex-col gap-20 items-center p-0 m-0">
           {/* CONDITION FOR SHOWING QUIZ: it exists */}        
           { quizInfo.length !==0 ? 
-              <QuizFull quizInfo={quizInfo}></QuizFull> : <div>This quiz either no longer exists, or you do not have permission to view it.</div>
+              <QuizFull quizInfo={quizInfo[0]}></QuizFull> : <div>This quiz either no longer exists, or you do not have permission to view it.</div>
           }
       </div>
     </>

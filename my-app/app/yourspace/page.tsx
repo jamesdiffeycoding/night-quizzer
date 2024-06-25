@@ -18,14 +18,7 @@ export default async function YourSpacePage() {
   return (
     <>
       <BannerHeading heading="Your space"></BannerHeading>
-      <div className="flex-1 w-full flex flex-col gap-20 items-center">
-
-        <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3">
-          <h1>All your quizzes</h1>
-          <QuizCard quizInfo={quizzes}></QuizCard>
-        </div>
-
-      </div>
+      <QuizCard quizInfo={quizzes} userId={user.id}></QuizCard>
     </>
   );
 }
