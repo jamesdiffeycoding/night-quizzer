@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import DeleteQuizByIDButton from "./DeleteQuizByIdButton";
 import UpdateQuizByIdButton from "./UpdateQuizByIdButton";
+import QuizQuestion from "./QuizQuestion";
 import {getCreationDay} from "../helper.js"
 import Popup from "./Popup";
 
@@ -15,16 +16,16 @@ export default function QuizFull({ quizInfo }) {
     const [scoreNumber, setScoreNumber] = useState(0)
     const [attempted, setAttempted] = useState(Array(quizLength).fill(false))
     const [attemptedNumber, setAttemptedNumber] = useState(0)
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [currentQIndex, setCurrentQIndex] = useState(0);
     const [responseMessage, setResponseMessage] = useState(Array(quizLength).fill(""))
     const [displayList, setDisplayList] = useState(false)
-    const [randomAnswerOrderArray, setRandomAnswerOrderArray] = useState(Array(quizLength).fill(0))
+    const [randomArray, setRandomArray] = useState(Array(quizLength).fill(0))
     useEffect(() => {
-        let temporary = randomAnswerOrderArray
+        let temporary = randomArray
         for (let i = 0; i <= quizLength; i++) {
             temporary[i] = (Math.floor(Math.random() * 2))
         }
-        setRandomAnswerOrderArray(temporary)
+        setRandomArray(temporary)
     }, []);
     
     
@@ -51,14 +52,14 @@ export default function QuizFull({ quizInfo }) {
             }, 3000); // 1000 milliseconds = 1 second
             }
     }
-    function handleNextQuestion (index) {
-        if (currentQuestionIndex < quizLength -1) {
-            setCurrentQuestionIndex(prev => prev+1)
+    function handleNextQ (index) {
+        if (currentQIndex < quizLength -1) {
+            setCurrentQIndex(prev => prev+1)
         }
     }
-    function handlePreviousQuestion (index) {
-        if (currentQuestionIndex > 0) {
-            setCurrentQuestionIndex(prev => prev-1)
+    function handlePreviousQ (index) {
+        if (currentQIndex > 0) {
+            setCurrentQIndex(prev => prev-1)
         }
     }
     function toggleDisplay () {
@@ -85,14 +86,15 @@ export default function QuizFull({ quizInfo }) {
         setPopupDisplay(false)
         setDisplayList(true)
     }
+
     let progressBarWidth = `${100 / quizLength}%`
 
     return (
         <> 
             {/* PROGRESS BAR */}
             <section className="animate-in min-w-full h-1 flex bg-gray-800 rounded-lg">
-                {score.map((result, bla) => (
-                    <div key={bla} className={score[bla] === 1 ? "bg-green-500" : (attempted[bla] === 1 ? "bg-orange-400" : "bg-white")} style={{ width: progressBarWidth }}>
+                {score.map((result, qIndex) => (
+                    <div key={qIndex} className={score[qIndex] === 1 ? "bg-green-500" : (attempted[qIndex] === 1 ? "bg-orange-400" : "bg-white")} style={{ width: progressBarWidth }}>
                     </div>
                 ))}
             </section>
@@ -102,8 +104,9 @@ export default function QuizFull({ quizInfo }) {
                 (<div>
                     <Popup score={scoreNumber} quizLength={quizLength}></Popup>
                     <div className="flex justify-between">
-                        <button onClick={hidePopup} className="bg-blue-900 rounded-md p-2 text-sm hover:bg-green-500 text-center">Review answers</button>
-                        <Link href={`/yourspace`} className="whitespace-nowrap left-8 top-8 py-2 px-4 rounded-md no-underline text-foreground bg-blue-900 hover:bg-btn-background-hover flex items-center group text-sm">Your space</Link>
+                        <button onClick={hidePopup} className="bg-blue-900 rounded-md p-2 text-sm hover:bg-green-500 text-center m-2">Review answers</button>
+                        <button onClick={() => window.location.reload()} className="bg-blue-900 rounded-md p-2 text-sm hover:bg-green-500 text-center m-2">Try again</button>
+                        <Link href={`/yourspace`} className="m-2 whitespace-nowrap left-8 top-8 py-2 px-4 rounded-md no-underline text-foreground bg-blue-900 hover:bg-btn-background-hover flex items-center group text-sm">Your space</Link>
 
                     </div>
                 </div>):
@@ -126,100 +129,33 @@ export default function QuizFull({ quizInfo }) {
                                     {/* SCORE TRACKERS ------------------------------------------------------------------------------------------------------------------------------------------------ */}
                                     <div>
                                         <div>Score: {scoreNumber} / {quizLength}</div>
-                                        <div>Questions remaining: {quizLength - attemptedNumber}</div>
+                                        <div>Qs remaining: {quizLength - attemptedNumber}</div>
                                     </div>
                                 </section>
 
-                                {/* QUESTIONS BLOCK------------------------------------------------------------------------------------------------------------------------------------- */}
+                                {/* QS BLOCK------------------------------------------------------------------------------------------------------------------------------------- */}
                                 <section className="mt-4">
                                     {displayList ? 
-                                // LIST OF QUESTIONS ----------------------------------------------------------------------------
+                                // LIST OF QS ----------------------------------------------------------------------------
 
                                         (<>
-                                        {quizInfo.questions.map((prompt, index) => (
-                                            <section key={index} className="bg-gray-800 p-10 rounded-lg my-2">
-                                                <p className="text-center text-gray-100 pb-5">Q{index+1}: {prompt.question}</p>
-                                                {/* ANSWER RANDOMISATION ------- */}
-                                                { randomAnswerOrderArray[index] == 1 ? (<>
-                                                    <p className="text-gray-100 hover:bg-gray-700 transition-colors duration-300 max-w-screen-sm" onClick={() => handleScore(index, true)}>
-                                                        <span className={attempted[index]? ("text-green-300"):("text-white")}>
-                                                            A: {prompt.answer}
-                                                        </span>
-                                                    </p>
-                                                    <p className="text-gray-100 hover:bg-gray-700 transition-colors duration-300 max-w-screen-sm" onClick={() => handleScore(index, false)}>
-                                                        <span>
-                                                            A: {prompt.decoy}
-                                                        </span>
-                                                    </p>
-                                                    <div className="text-center text-gray-400">{responseMessage[index]}</div>
-
-                                                </>) : (<>
-                                                    <p className="text-gray-100 hover:bg-gray-700 transition-colors duration-300 max-w-screen-sm" onClick={() => handleScore(index, false)}>
-                                                    <span>
-                                                        A: {prompt.decoy}
-                                                    </span>
-                                                    </p>
-                                                    <p className="text-gray-100 hover:bg-gray-700 transition-colors duration-300 max-w-screen-sm" onClick={() => handleScore(index, true)}>
-                                                        <span className={attempted[index]? ("text-green-300"):("text-white")}>
-                                                            A: {prompt.answer}
-                                                        </span>
-                                                    </p>
-
-                                                    <div className="text-center text-gray-400">{responseMessage[index]}</div>
-                                                </>)
-                                                    
-                                                }
+                                        {quizInfo.questions.map((prompt, index) => (                    
+                                            <section key={index}>
+                                                <QuizQuestion randomArray={randomArray} attempted={attempted} currentQIndex={index} quizInfo={quizInfo} score={score} responseMessage={responseMessage} handleScore={handleScore}></QuizQuestion>
                                             </section>
-
                                         ))}
-                                        <div>Your score: {scoreNumber}</div>
-                                        <div>Your attempts: {attemptedNumber}</div>
                                     </>) : 
-                                // INDIVIDUAL QUESTIONS ----------------------------------------------------------------------------
-                                    (<>{ randomAnswerOrderArray[currentQuestionIndex] == 1 ? (<>
-                                        <section className="bg-gray-800 p-10 rounded-lg">
-                                            <p className="text-center text-gray-100 pb-5">Q{currentQuestionIndex + 1}: {quizInfo.questions[currentQuestionIndex].question}</p>
-
-                                            <p className="text-gray-100 hover:bg-gray-700 transition-colors duration-300 max-w-screen-sm" onClick={() => handleScore(currentQuestionIndex, true)}>
-                                                <span className={attempted[currentQuestionIndex]? ("text-green-300"):("text-white")}>
-                                                    A: {quizInfo.questions[currentQuestionIndex].answer}
-                                                </span>
-                                            </p>
-                                            <p className="text-gray-100 hover:bg-gray-700 transition-colors duration-300 max-w-screen-sm" onClick={() => handleScore(currentQuestionIndex, false)}>
-                                                <span>
-                                                    A: {quizInfo.questions[currentQuestionIndex].decoy}
-                                                </span>
-                                            </p>
-                                            <div className="text-center text-gray-400">{responseMessage[currentQuestionIndex]}</div>
-                                        </section>
-
-                                    </>) : (<>
-                                        <section className="bg-gray-800 p-10 rounded-lg mb-6">
-                                            <p className="text-center text-gray-100 pb-5">Q{currentQuestionIndex + 1}: {quizInfo.questions[currentQuestionIndex].question}</p>
-                                            <p className="text-gray-100 hover:bg-gray-700 transition-colors duration-300 max-w-screen-sm" onClick={() => handleScore(currentQuestionIndex, false)}>
-                                                <span>
-                                                    A: {quizInfo.questions[currentQuestionIndex].decoy}
-                                                </span>
-                                            </p>
-                                            <p className="text-gray-100 hover:bg-gray-700 transition-colors duration-300 max-w-screen-sm" onClick={() => handleScore(currentQuestionIndex, true)}>
-                                                <span className={attempted[currentQuestionIndex]? ("text-green-300"):("text-white")}>
-                                                    A: {quizInfo.questions[currentQuestionIndex].answer}
-                                                </span>
-                                            </p>
-
-                                            <div className="text-center text-gray-400">{responseMessage[currentQuestionIndex]}</div>
-                                        </section>
-                                    </>)
-                                    }
-
+                                // INDIVIDUAL QS ----------------------------------------------------------------------------
+                                (<>
+                                    <QuizQuestion randomArray={randomArray} attempted={attempted} currentQIndex={currentQIndex} quizInfo={quizInfo} score={score} responseMessage={responseMessage} handleScore={handleScore}></QuizQuestion>
                                     {/* PREVIOUS AND NEXT BUTTONS------------------------------------------------------------------------------------------------------------------------------------- */}
                                     <section className="flex justify-between">
-                                        { currentQuestionIndex !== 0 ? (<button onClick={handlePreviousQuestion} className="bg-blue-900 rounded-md p-2 text-sm hover:bg-green-500">Previous question</button>)
+                                        { currentQIndex !== 0 ? (<button onClick={handlePreviousQ} className="bg-blue-900 rounded-md p-2 text-sm hover:bg-green-500">Previous Q</button>)
                                         : (<div className="text-transparent">.</div>)
                                         }
-                                        { currentQuestionIndex !== quizLength -1 ? (<button onClick={handleNextQuestion} className="bg-blue-900 rounded-md p-2 text-sm hover:bg-green-500">Next question</button>)
+                                        { currentQIndex !== quizLength -1 ? (<button onClick={handleNextQ} className="bg-blue-900 rounded-md p-2 text-sm hover:bg-green-500">Next Q</button>)
                                         : (<div className="transparent">.</div>)
-                                        }
+                                    }
                                     </section>
 
                                 </>)
