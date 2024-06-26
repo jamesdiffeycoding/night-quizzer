@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import DeleteQuizByIDButton from "./DeleteQuizByIdButton";
-import UpdateQuizByIdButton from "./UpdateQuizByIdButton";
+import FetchComponent from "./FetchComponent";
 import QuizQuestion from "./QuizQuestion";
 import {getCreationDay} from "../helper.js"
 import Popup from "./Popup";
@@ -37,7 +37,7 @@ export default function QuizFull({ quizInfo }) {
             setAttemptedNumber(temporary.reduce((total, currentValue) => total + currentValue, 0))
         }
     }
-    function handleScore (index, isCorrect) {
+    async function handleScore (index, isCorrect) {
         if (isCorrect && attempted[index] == 0) {
             let temporary = score
             temporary[index] = 1
@@ -48,9 +48,9 @@ export default function QuizFull({ quizInfo }) {
         handleAttempt(index)
         if (attemptedNumber == quizLength-1) {
             setTimeout(() => {
-                setPopupDisplay(true)
+                setPopupDisplay(true);
             }, 3000); // 1000 milliseconds = 1 second
-            }
+        }
     }
     function handleNextQ (index) {
         if (currentQIndex < quizLength -1) {
@@ -92,6 +92,8 @@ export default function QuizFull({ quizInfo }) {
     return (
         <> 
             {/* PROGRESS BAR */}
+            <FetchComponent></FetchComponent>
+
             <section className="animate-in min-w-full h-1 flex bg-gray-800 rounded-lg">
                 {score.map((result, qIndex) => (
                     <div key={qIndex} className={score[qIndex] === 1 ? "bg-green-500" : (attempted[qIndex] === 1 ? "bg-orange-400" : "bg-white")} style={{ width: progressBarWidth }}>
@@ -120,8 +122,8 @@ export default function QuizFull({ quizInfo }) {
                                         <p className="text-sm font-normal">{quizInfo.description}</p>
                                     </h2>
 
-                                    <div className="flex items-center justify-right bg-blue-900 rounded-lg cursor-pointer text-xs" onClick={toggleDisplay}>
-                                        <span className="ml-2 pr-2">List view </span>
+                                    <div className="flex items-center justify-right bg-blue-900 rounded-lg cursor-pointer text-xs p-2" onClick={toggleDisplay}>
+                                        <span className="pr-2">List view </span>
                                         <div className={`w-9 h-5 rounded-full p-1  ${displayList ? 'bg-green-500' : 'bg-blue-500'}`}  >
                                             <div className={`w-3 h-3 bg-white rounded-full shadow-md transform ${displayList ? 'translate-x-full' : ''}`}></div>
                                         </div>
