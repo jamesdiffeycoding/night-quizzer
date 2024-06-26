@@ -12,22 +12,22 @@ import Popup from "./Popup";
 
 export default function FetchComponent() {
     const [debug, setDebug] = useState("")
-    async function api(table, method) {
-        let url = `http://localhost:3001/api/quiz`;
+    async function api(table, method, id) {
+        let url = `http://localhost:3001/api/quiz/${id ? id : ""}`;
         setDebug(`${method} called...`);
+        let request = {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+        // Adjust the request body for specific methods if needed
+        if (method === 'POST' || method === 'PATCH') {
+            request.body = JSON.stringify({ table: table, id: id, data: { title: "updatecode", description: "API", testcol: "test" } });
+        }
+    
         try {
-            const response = await fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ table: table, 
-                    method: method, 
-                    id: 4,
-                    data: {title: "test3", 
-                        description: "API"}
-                    })
-            });
+            const response = await fetch(url, request);
     
             if (response.ok) {
                 console.log(`${method} success`);
@@ -37,23 +37,19 @@ export default function FetchComponent() {
                 console.log(data);
             } else {
                 console.error(`Failed to ${method} quiz`);
-                console.log(error);
-                setDebug(`Error: ${method} failed`);
+                setDebug(`Error: Failed to ${method} quiz`);
             }
         } catch (error) {
             console.error('Error updating quiz:', error);
-            setDebug(`Error: ${error} ${method} failed`);
+            setDebug(`Error: ${error.message}`);
         }
-    };
-          
+    }     
     return (
         <> 
             <h1>TEST FUNCTIONS - {debug}</h1>
-                <div onClick={() => api("notes", "DELETE")}><span className="text-red-500">DELETE</span></div>
                 <div onClick={() => api("notes", "POST")}><span className="text-green-500">POST</span></div>
-                <div onClick={() => api("notes", "UPDATE")}><span className="text-red-500">UPDATE</span></div>
-
-
+                <div onClick={() => api("notes", "DELETE", "7")}><span className="text-red-500">DELETE</span></div>
+                <div onClick={() => api("notes", "PATCH", "8")}><span className="text-red-500">PUT</span></div>
         </>
     )
 }
