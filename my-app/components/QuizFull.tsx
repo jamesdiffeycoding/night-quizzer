@@ -9,9 +9,10 @@ import QuizQuestion from "./QuizQuestion";
 import {getCreationDay} from "../helper.js"
 import Popup from "./Popup";
 import ApiUpdateButton from "./ApiUpdateButton";
+import quizApi from '@/apiHelper';
 
-export default function QuizFull({ quizInfo, userId }) {
-    let quizLength = quizInfo.questions.length
+export default function QuizFull({ fetchedQuizData, userId }) {
+    let quizLength = fetchedQuizData.questions.length
     const [score, setScore] = useState(Array(quizLength).fill(0))
     const [scoreNumber, setScoreNumber] = useState(0)
     const [attempted, setAttempted] = useState(Array(quizLength).fill(false))
@@ -50,11 +51,12 @@ export default function QuizFull({ quizInfo, userId }) {
         if (attemptedNumber == quizLength-1) {
             setTimeout(() => {
                 setPopupDisplay(true);
+                handlePlaysCount()
             }, 3000); // 1000 milliseconds = 1 second
         }
     }
     function handleNextQ (index) {
-        if (currentQIndex < quizLength -1) {
+        if (currentQIndex < updatedQuizData.questions.length -1) {
             setCurrentQIndex(prev => prev+1)
         }
     }
@@ -87,7 +89,7 @@ export default function QuizFull({ quizInfo, userId }) {
         setPopupDisplay(false)
         setDisplayList(true)
     }
-    const isUserQuizOwner = (quizInfo.user_id === userId)
+    const isUserQuizOwner = (fetchedQuizData.user_id === userId)
     
     let progressBarWidth = `${100 / quizLength}%`
     
@@ -96,17 +98,17 @@ export default function QuizFull({ quizInfo, userId }) {
     
     
     const [updateMode, setUpdateMode] = useState(false)
-    const [updateInfo, setUpdateInfo] = useState(quizInfo)
+    const [updatedQuizData, setUpdateInfo] = useState(fetchedQuizData)
     function handleUpdateToggle () {
         let temporary = !updateMode
         setUpdateMode(temporary)
         
         if (temporary === false) {
-            setUpdateInfo(quizInfo) // reset data back to original if updateMode cancelled
+            setUpdateInfo(fetchedQuizData) // reset data back to original if updateMode cancelled
         }
     }
-    console.log("Quiz question info /////: ", quizInfo.questions)
-    console.log("Update questions info -----: ", updateInfo.questions)
+    console.log("Quiz question info /////: ", fetchedQuizData.questions)
+    console.log("Update questions info -----: ", updatedQuizData.questions)
 
 
     function handleEditTyping(fieldType, newValue, questionIndex) {
@@ -138,9 +140,9 @@ export default function QuizFull({ quizInfo, userId }) {
         });
     };
 
-    if (currentQIndex >= updateInfo.questions.length) {
+    if (currentQIndex >= updatedQuizData.questions.length) {
         // Adjust the current question index to a valid index
-        setCurrentQIndex(updateInfo.questions.length - 1);
+        setCurrentQIndex(updatedQuizData.questions.length - 1);
         return null; // Return null or handle the case where the question index is out of bounds
     }
 
@@ -154,7 +156,7 @@ export default function QuizFull({ quizInfo, userId }) {
             return updatedQuizInfo;
         });
     }
-    function handleAddQ(index) {
+    function handleAddQ(index, viewQuestionAfter) {
         setUpdateInfo(prevUpdateInfo => {
             const updatedQuizInfo = _.cloneDeep(prevUpdateInfo);
 
@@ -163,8 +165,17 @@ export default function QuizFull({ quizInfo, userId }) {
             }
             return updatedQuizInfo;
         });
+        if (viewQuestionAfter) handleNextQ()
     }
-    
+    async function handlePlaysCount () {
+        setUpdateInfo(prevUpdateInfo => {
+            const updatedQuizInfo = _.cloneDeep(prevUpdateInfo);
+            let newCount = Number(updatedQuizInfo.globalPlays) +1
+            updatedQuizInfo.globalPlays = newCount
+            quizApi("quizzes", "PATCH", updatedQuizData.id, updatedQuizInfo)
+            return updatedQuizInfo;
+        });
+    }
     
     return (
         <> 
@@ -188,10 +199,10 @@ export default function QuizFull({ quizInfo, userId }) {
                 </div>):
                 (<>
                     <div className="animate-in flex-1 flex flex-col gap-5 opacity-0 px-3 mt-5 mb-5 max-w-screen-lg w-5/6 min-w-fit">
-                            <div key={updateInfo.id} className="shadow-md rounded-lg p-4 m-2 border border-blue-300">
+                            <div key={updatedQuizData.id} className="shadow-md rounded-lg p-4 m-2 border border-blue-300">
                                 <section className="flex justify-between">
-                                    <h2 className="text-xl font-bold mb-4">{updateInfo.name}
-                                        <p className="text-sm font-normal">{updateInfo.description}</p>
+                                    <h2 className="text-xl font-bold mb-4">{updatedQuizData.name}
+                                        <p className="text-sm font-normal">{updatedQuizData.description}</p>
                                     </h2>
 
                                     <div className="flex items-center justify-right bg-blue-900 rounded-lg cursor-pointer text-xs p-2" onClick={toggleDisplay}>
@@ -203,7 +214,7 @@ export default function QuizFull({ quizInfo, userId }) {
                                     {/* SCORE TRACKERS ------------------------------------------------------------------------------------------------------------------------------------------------ */}
                                     {updateMode ? (
                                         <div>
-                                            <div>Questions: {updateInfo.questions.length}</div>
+                                            <div>Questions: {updatedQuizData.questions.length}</div>
                                         </div>     
                                     ): (
                                         <div>
@@ -219,22 +230,22 @@ export default function QuizFull({ quizInfo, userId }) {
                                 // LIST OF QS ----------------------------------------------------------------------------
 
                                         (<>
-                                        {updateInfo.questions.map((prompt, index) => (                    
+                                        {updatedQuizData.questions.map((prompt, index) => (                    
                                             <section key={index}>
-                                                <QuizQuestion handleDeleteQ={handleDeleteQ} handleAddQ={handleAddQ}updateMode={updateMode} randomArray={randomArray} attempted={attempted} currentQIndex={index} quizInfo={quizInfo} score={score} handleEditTyping={handleEditTyping} displayList={displayList} updateInfo={updateInfo}responseMessage={responseMessage} handleScore={handleScore}></QuizQuestion>
+                                                <QuizQuestion handleDeleteQ={handleDeleteQ} handleAddQ={handleAddQ}updateMode={updateMode} randomArray={randomArray} attempted={attempted} currentQIndex={index} fetchedQuizData={fetchedQuizData} score={score} handleEditTyping={handleEditTyping} displayList={displayList} updatedQuizData={updatedQuizData}responseMessage={responseMessage} handleScore={handleScore}></QuizQuestion>
                                             </section>
                                         ))}
                                     </>) : 
                                 // INDIVIDUAL QS ----------------------------------------------------------------------------
                                 (<>
-                                    <QuizQuestion handleDeleteQ={handleDeleteQ} handleAddQ={handleAddQ}updateMode={updateMode} randomArray={randomArray} attempted={attempted} currentQIndex={currentQIndex} quizInfo={quizInfo} score={score} handleEditTyping={handleEditTyping} displayList={displayList} updateInfo={updateInfo}responseMessage={responseMessage} handleScore={handleScore}></QuizQuestion>
+                                    <QuizQuestion handleDeleteQ={handleDeleteQ} handleAddQ={handleAddQ}updateMode={updateMode} randomArray={randomArray} attempted={attempted} currentQIndex={currentQIndex} fetchedQuizData={fetchedQuizData} score={score} handleEditTyping={handleEditTyping} displayList={displayList} updatedQuizData={updatedQuizData}responseMessage={responseMessage} handleScore={handleScore}></QuizQuestion>
                                     {/* PREVIOUS AND NEXT BUTTONS------------------------------------------------------------------------------------------------------------------------------------- */}
                                     <section className="flex justify-between w-full">
                                         { currentQIndex !== 0 ? 
                                             (<button onClick={handlePreviousQ} className="bg-blue-900 rounded-md p-2 text-sm hover:bg-green-500">Previous Q</button>)
                                             : (<div className="text-transparent">.</div>)
                                         }
-                                        { currentQIndex !== updateInfo.questions.length -1 ? 
+                                        { currentQIndex !== updatedQuizData.questions.length -1 ? 
                                             (<button onClick={handleNextQ} className="bg-blue-900 rounded-md p-2 text-sm hover:bg-green-500">Next Q</button>)
                                             : (<div className="transparent">.</div>)
                                         }   
@@ -253,8 +264,8 @@ export default function QuizFull({ quizInfo, userId }) {
             {/* QUIZ MANAGEMENT */}
                 {isUserQuizOwner ? (
                     <div className="flex justify-between">
-                        <ApiUpdateButton quizId={quizInfo.id} handleUpdateToggle={handleUpdateToggle}></ApiUpdateButton>
-                        <ApiDeleteButton quizId={quizInfo.id}></ApiDeleteButton>
+                        <ApiUpdateButton quizId={fetchedQuizData.id} handleUpdateToggle={handleUpdateToggle} updatedQuizData = {updatedQuizData}></ApiUpdateButton>
+                        <ApiDeleteButton quizId={fetchedQuizData.id}></ApiDeleteButton>
                     </div>
                     ):(<></>
                 )

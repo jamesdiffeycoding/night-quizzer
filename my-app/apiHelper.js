@@ -1,4 +1,4 @@
-export default async function quizApi(table, method, id) {
+export default async function quizApi(table, method, id, postOrPatchInfo) {
     let url = `http://localhost:3001/api/quiz/${id ? id : ""}`;
     let request = {
         method: method,
@@ -8,7 +8,7 @@ export default async function quizApi(table, method, id) {
     };
     // Adjust the request body for specific methods if needed
     if (method === 'POST' || method === 'PATCH') {
-        request.body = JSON.stringify({ table: table, id: id, data: { title: "updatecode", description: "API", testcol: "test"} });
+        request.body = JSON.stringify({ data: postOrPatchInfo });
     }
     try {
         const response = await fetch(url, request);

@@ -1,7 +1,7 @@
 
 "use client"
 import { useEffect, useState } from "react"
-export default function QuizQuestion ({handleDeleteQ, handleAddQ, updateMode, displayList, randomArray, attempted, currentQIndex, responseMessage, handleScore, score, handleEditTyping, updateInfo}) {
+export default function QuizQuestion ({handleDeleteQ, handleAddQ, updateMode, displayList, randomArray, attempted, currentQIndex, responseMessage, handleScore, score, handleEditTyping, updatedQuizData}) {
     
     return (
         <>
@@ -14,7 +14,7 @@ export default function QuizQuestion ({handleDeleteQ, handleAddQ, updateMode, di
                                 <p>Name of quiz: </p>
                                 <input
                                     type="text"
-                                    value={updateInfo.name}
+                                    value={updatedQuizData.name}
                                     onChange={(e) => handleEditTyping("name", e.target.value, currentQIndex)}
                                     className={`text-gray-300 width-full bg-gray-700 hover:bg-gray-500 p-2 rounded-lg transition-colors duration-300 ${score[currentQIndex] === 1 ? 'text-green-300' : ''}`}
                                     />
@@ -24,7 +24,7 @@ export default function QuizQuestion ({handleDeleteQ, handleAddQ, updateMode, di
                                 
                                 <input
                                     type="text"
-                                    value={updateInfo.description}
+                                    value={updatedQuizData.description}
                                     onChange={(e) => handleEditTyping("description", e.target.value, currentQIndex)}
                                     className={`text-gray-300 width-full bg-gray-700 hover:bg-gray-500 p-2 rounded-lg transition-colors duration-300 ${score[currentQIndex] === 1 ? 'text-green-300' : ''}`}
                                     />
@@ -37,7 +37,7 @@ export default function QuizQuestion ({handleDeleteQ, handleAddQ, updateMode, di
                             <p>Question {currentQIndex + 1}:</p>
                             <input
                                 type="text"
-                                value={updateInfo.questions[currentQIndex].question}
+                                value={updatedQuizData.questions[currentQIndex].question}
                                 onChange={(e) => handleEditTyping("question", e.target.value, currentQIndex)}
                                 className={`text-gray-300 width-full bg-gray-700 hover:bg-gray-500 p-2 rounded-lg transition-colors duration-300 ${score[currentQIndex] === 1 ? 'text-green-300' : ''}`}
                             />
@@ -46,7 +46,7 @@ export default function QuizQuestion ({handleDeleteQ, handleAddQ, updateMode, di
                             <p>Correct answer: </p>
                             <input
                                 type="text"
-                                value={updateInfo.questions[currentQIndex].answer}
+                                value={updatedQuizData.questions[currentQIndex].answer}
                                 onChange={(e) => handleEditTyping("correctAnswer", e.target.value, currentQIndex)}
                                 className={`text-green-300 width-full bg-gray-700 hover:bg-gray-500 p-2 rounded-lg transition-colors duration-300 ${score[currentQIndex] === 1 ? 'text-green-300' : ''}`}
                             />
@@ -57,7 +57,7 @@ export default function QuizQuestion ({handleDeleteQ, handleAddQ, updateMode, di
 
                             <input
                                 type="text"
-                                value={updateInfo.questions[currentQIndex].decoy}
+                                value={updatedQuizData.questions[currentQIndex].decoy}
                                 onChange={(e) => handleEditTyping("decoyAnswer", e.target.value, currentQIndex)}
                                 className={`text-red-300 bg-gray-700 hover:bg-gray-500 p-2 rounded-lg transition-colors duration-300 max-w-screen-sm ${score[currentQIndex] === 1 ? '' : attempted[currentQIndex] === 1 ? 'text-red-300' : ''}`}
                             />
@@ -67,29 +67,29 @@ export default function QuizQuestion ({handleDeleteQ, handleAddQ, updateMode, di
                         <section className="flex justify-between w-full">
                             <button className="bg-blue-900 rounded-md p-2 text-sm hover:bg-red-500" onClick={()=> handleDeleteQ(currentQIndex)}>Delete this question</button>
                             <div className="flex">
-                                <button className="bg-blue-900 rounded-md p-2 text-sm hover:bg-green-500 mr-2" onClick={()=> handleAddQ(currentQIndex)}>Add question BEFORE</button>
-                                <button className="bg-blue-900 rounded-md p-2 text-sm hover:bg-green-500" onClick={()=> handleAddQ(currentQIndex+1)}>Add question AFTER</button>
+                                <button className="bg-blue-900 rounded-md p-2 text-sm hover:bg-green-500 mr-2" onClick={()=> handleAddQ(currentQIndex, false)}>Add question BEFORE</button>
+                                <button className="bg-blue-900 rounded-md p-2 text-sm hover:bg-green-500" onClick={()=> handleAddQ(currentQIndex+1, true)}>Add question AFTER</button>
                             </div>
 
                         </section>
 
                 </>) :
                 (<>
-                        <h3 className="text-center text-gray-300 pb-5">Q{currentQIndex + 1}: {updateInfo.questions[currentQIndex].question}</h3>
+                        <h3 className="text-center text-gray-300 pb-5">Q{currentQIndex + 1}: {updatedQuizData.questions[currentQIndex].question}</h3>
                         {randomArray[currentQIndex] === 1 ?
                             (<>
                                 <p className={`text-gray-100 hover:bg-gray-700 transition-colors duration-300 max-w-screen-sm ${score[currentQIndex] === 1 ? 'text-green-300' : attempted[currentQIndex] === 1 ? '' : ''}`} onClick={() => handleScore(currentQIndex, true)}>
-                                    A: {updateInfo.questions[currentQIndex].answer}
+                                    A: {updatedQuizData.questions[currentQIndex].answer}
                                 </p>
                                 <p className={`text-gray-100 hover:bg-gray-700 transition-colors duration-300 max-w-screen-sm ${score[currentQIndex] === 1 ? '' : attempted[currentQIndex] === 1 ? 'text-red-300' : ''}`} onClick={() => handleScore(currentQIndex, false)}>
-                                    A: {updateInfo.questions[currentQIndex].decoy}
+                                    A: {updatedQuizData.questions[currentQIndex].decoy}
                                 </p>
                             </>) : (<>
                                 <p className={`text-gray-100 hover:bg-gray-700 transition-colors duration-300 max-w-screen-sm ${score[currentQIndex] === 1 ? '' : attempted[currentQIndex] === 1 ? 'text-red-300' : ''}`} onClick={() => handleScore(currentQIndex, false)}>
-                                    A: {updateInfo.questions[currentQIndex].decoy}
+                                    A: {updatedQuizData.questions[currentQIndex].decoy}
                                 </p>
                                 <p className={`text-gray-100 hover:bg-gray-700 transition-colors duration-300 max-w-screen-sm ${score[currentQIndex] === 1 ? 'text-green-300' : attempted[currentQIndex] === 1 ? '' : ''}`} onClick={() => handleScore(currentQIndex, true)}>
-                                    A: {updateInfo.questions[currentQIndex].answer}
+                                    A: {updatedQuizData.questions[currentQIndex].answer}
                                 </p>
                             </>)
                         }

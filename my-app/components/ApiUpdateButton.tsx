@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { useState } from "react";
 import quizApi from "../apiHelper";
 
-export default function ApiUpdateButton({quizId, handleUpdateToggle}) {
+export default function ApiUpdateButton({quizId, handleUpdateToggle, updatedQuizData}) {
    const [confirmation, setConfirmation] = useState(false);
    const [delay, setDelay] = useState(false)
 
@@ -18,13 +18,13 @@ export default function ApiUpdateButton({quizId, handleUpdateToggle}) {
    }
 
    return (
-      <div className="text-center bg-gray-700 p-1 m-1 text-sm rounded-lg">
+      <div className="text-center bg-gray-700 hover:bg-gray-500 p-1 m-1 text-sm rounded-lg">
          { confirmation ? (
             <div>
                <p>Edit the questions and press Update when you're ready.</p>
                {delay ? (
                   <>
-                     <button onClick={() => quizApi("notes", "PATCH", quizId)} className="p-2 rounded-lg text-amber-500 bg-gray-900 mr-1">Confirm update.</button>
+                     <button onClick={() => {quizApi("quizzes", "PATCH", quizId, updatedQuizData); window.location.reload()}} className="p-2 rounded-lg text-amber-500 bg-gray-900 mr-1">Confirm update.</button>
                      <button onClick={handleUpdateClick} className="p-2 rounded-lg text-amber-500 bg-gray-900 ml-1">X</button>
                   </>
                ):(<></>)}

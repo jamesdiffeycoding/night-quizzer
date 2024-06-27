@@ -16,7 +16,7 @@ export default async function YourSpacePage({params}) {
   }
 
   /* QUIZ FETCH REQUIREMENT: all your quizes */
-  const { data: quizInfo } = await supabase.from('quizzes').select().eq('id', `${quizId}`)
+  const { data: fetchedQuizData } = await supabase.from('quizzes').select().eq('id', `${quizId}`)
 
 
   return (
@@ -26,8 +26,8 @@ export default async function YourSpacePage({params}) {
 
       <div className="flex-1 w-full flex flex-col gap-20 items-center p-0 m-0">
           {/* CONDITION FOR SHOWING QUIZ: it exists */}        
-          { quizInfo.length !==0 ? 
-              <QuizFull quizInfo={quizInfo[0]} userId={user.id}></QuizFull> : <div>This quiz either no longer exists, or you do not have permission to view it.</div>
+          { fetchedQuizData.length !==0 ? 
+              <QuizFull fetchedQuizData={fetchedQuizData[0]} userId={user.id}></QuizFull> : <div>This quiz either no longer exists, or you do not have permission to view it.</div>
           }
       </div>
     </>

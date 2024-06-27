@@ -20,7 +20,7 @@ export default async function DashPage() {
       <TopBar></TopBar>
 
       <BannerHeading heading="All quizzes"></BannerHeading>
-      <QuizCard quizInfo={quizzes} userId={user.id}></QuizCard>
+      <QuizCard fetchedQuizData={quizzes} userId={user.id}></QuizCard>
     </>
   );
 }

@@ -16,7 +16,7 @@ export default async function DashPage({params}) {
   }
 
   /* QUIZ FETCH REQUIREMENT: can be from any user id as long as it is NOT private */
-  const { data: quizInfo } = await supabase.from('quizzes').select().eq('private', 'false').eq('id', `${quizId}`)
+  const { data: fetchedQuizData } = await supabase.from('quizzes').select().eq('private', 'false').eq('id', `${quizId}`)
 
   return (
     <>
@@ -26,8 +26,8 @@ export default async function DashPage({params}) {
 
       <div className="flex-1 w-full flex flex-col gap-20 items-center">
           {/* CONDITION FOR SHOWING QUIZ: it exists */}        
-          { quizInfo.length !==0 ? 
-              <QuizFull quizInfo={quizInfo}></QuizFull> : <div>This quiz either no longer exists, or you do not have permission to view it.</div>
+          { fetchedQuizData.length !==0 ? 
+              <QuizFull fetchedQuizData={fetchedQuizData}></QuizFull> : <div>This quiz either no longer exists, or you do not have permission to view it.</div>
           }
       </div>
       </>

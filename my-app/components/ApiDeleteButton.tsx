@@ -16,7 +16,7 @@ export default function ApiDeleteButton({quizId}) {
    }
 
    return (
-      <div className="text-center bg-gray-700 p-1 m-1 text-sm rounded-lg">
+      <div className="text-center bg-gray-700 hover:bg-gray-500 p-1 m-1 text-sm rounded-lg">
          { confirmation ? (
             <div>
                <p>Once this quiz has been deleted, it cannot be recovered. Are you sure you want to delete it?</p>
