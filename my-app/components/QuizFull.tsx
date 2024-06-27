@@ -100,6 +100,10 @@ export default function QuizFull({ quizInfo, userId }) {
     function handleUpdateToggle () {
         let temporary = !updateMode
         setUpdateMode(temporary)
+        
+        if (temporary === false) {
+            setUpdateInfo(quizInfo) // reset data back to original if updateMode cancelled
+        }
     }
     console.log("Quiz question info /////: ", quizInfo.questions)
     console.log("Update questions info -----: ", updateInfo.questions)
@@ -150,6 +154,16 @@ export default function QuizFull({ quizInfo, userId }) {
             return updatedQuizInfo;
         });
     }
+    function handleAddQ(index) {
+        setUpdateInfo(prevUpdateInfo => {
+            const updatedQuizInfo = _.cloneDeep(prevUpdateInfo);
+
+            if (updatedQuizInfo.questions.length < 100) { //max questions = 100
+                updatedQuizInfo.questions.splice(index, 0, {decoy: "Decoy", answer: "Answer", question: "Question"})
+            }
+            return updatedQuizInfo;
+        });
+    }
     
     
     return (
@@ -174,10 +188,10 @@ export default function QuizFull({ quizInfo, userId }) {
                 </div>):
                 (<>
                     <div className="animate-in flex-1 flex flex-col gap-5 opacity-0 px-3 mt-5 mb-5 max-w-screen-lg w-5/6 min-w-fit">
-                            <div key={quizInfo.id} className="shadow-md rounded-lg p-4 m-2 border border-blue-300">
+                            <div key={updateInfo.id} className="shadow-md rounded-lg p-4 m-2 border border-blue-300">
                                 <section className="flex justify-between">
-                                    <h2 className="text-xl font-bold mb-4">{quizInfo.name}
-                                        <p className="text-sm font-normal">{quizInfo.description}</p>
+                                    <h2 className="text-xl font-bold mb-4">{updateInfo.name}
+                                        <p className="text-sm font-normal">{updateInfo.description}</p>
                                     </h2>
 
                                     <div className="flex items-center justify-right bg-blue-900 rounded-lg cursor-pointer text-xs p-2" onClick={toggleDisplay}>
@@ -187,10 +201,16 @@ export default function QuizFull({ quizInfo, userId }) {
                                         </div>
                                     </div>    
                                     {/* SCORE TRACKERS ------------------------------------------------------------------------------------------------------------------------------------------------ */}
-                                    <div>
-                                        <div>Score: {scoreNumber} / {quizLength}</div>
-                                        <div>Qs remaining: {quizLength - attemptedNumber}</div>
-                                    </div>
+                                    {updateMode ? (
+                                        <div>
+                                            <div>Questions: {updateInfo.questions.length}</div>
+                                        </div>     
+                                    ): (
+                                        <div>
+                                            <div>Score: {scoreNumber} / {quizLength}</div>
+                                            <div>Qs remaining: {quizLength - attemptedNumber}</div>
+                                        </div>
+                                    )}
                                 </section>
 
                                 {/* QS BLOCK------------------------------------------------------------------------------------------------------------------------------------- */}
@@ -199,15 +219,15 @@ export default function QuizFull({ quizInfo, userId }) {
                                 // LIST OF QS ----------------------------------------------------------------------------
 
                                         (<>
-                                        {quizInfo.questions.map((prompt, index) => (                    
+                                        {updateInfo.questions.map((prompt, index) => (                    
                                             <section key={index}>
-                                                <QuizQuestion handleDeleteQ={handleDeleteQ} updateMode={updateMode} randomArray={randomArray} attempted={attempted} currentQIndex={index} quizInfo={quizInfo} score={score} handleEditTyping={handleEditTyping} displayList={displayList} updateInfo={updateInfo}responseMessage={responseMessage} handleScore={handleScore}></QuizQuestion>
+                                                <QuizQuestion handleDeleteQ={handleDeleteQ} handleAddQ={handleAddQ}updateMode={updateMode} randomArray={randomArray} attempted={attempted} currentQIndex={index} quizInfo={quizInfo} score={score} handleEditTyping={handleEditTyping} displayList={displayList} updateInfo={updateInfo}responseMessage={responseMessage} handleScore={handleScore}></QuizQuestion>
                                             </section>
                                         ))}
                                     </>) : 
                                 // INDIVIDUAL QS ----------------------------------------------------------------------------
                                 (<>
-                                    <QuizQuestion handleDeleteQ={handleDeleteQ} updateMode={updateMode} randomArray={randomArray} attempted={attempted} currentQIndex={currentQIndex} quizInfo={quizInfo} score={score} handleEditTyping={handleEditTyping} displayList={displayList} updateInfo={updateInfo}responseMessage={responseMessage} handleScore={handleScore}></QuizQuestion>
+                                    <QuizQuestion handleDeleteQ={handleDeleteQ} handleAddQ={handleAddQ}updateMode={updateMode} randomArray={randomArray} attempted={attempted} currentQIndex={currentQIndex} quizInfo={quizInfo} score={score} handleEditTyping={handleEditTyping} displayList={displayList} updateInfo={updateInfo}responseMessage={responseMessage} handleScore={handleScore}></QuizQuestion>
                                     {/* PREVIOUS AND NEXT BUTTONS------------------------------------------------------------------------------------------------------------------------------------- */}
                                     <section className="flex justify-between w-full">
                                         { currentQIndex !== 0 ? 

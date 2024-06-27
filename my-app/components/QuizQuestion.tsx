@@ -1,7 +1,7 @@
 
 "use client"
 import { useEffect, useState } from "react"
-export default function QuizQuestion ({handleDeleteQ, updateMode, displayList, randomArray, attempted, currentQIndex, quizInfo, responseMessage, handleScore, score, handleEditTyping, updateInfo}) {
+export default function QuizQuestion ({handleDeleteQ, handleAddQ, updateMode, displayList, randomArray, attempted, currentQIndex, responseMessage, handleScore, score, handleEditTyping, updateInfo}) {
     
     return (
         <>
@@ -66,26 +66,30 @@ export default function QuizQuestion ({handleDeleteQ, updateMode, displayList, r
                         </section>
                         <section className="flex justify-between w-full">
                             <button className="bg-blue-900 rounded-md p-2 text-sm hover:bg-red-500" onClick={()=> handleDeleteQ(currentQIndex)}>Delete this question</button>
-                            <button className="bg-blue-900 rounded-md p-2 text-sm hover:bg-green-500">Add a new question</button>
+                            <div className="flex">
+                                <button className="bg-blue-900 rounded-md p-2 text-sm hover:bg-green-500 mr-2" onClick={()=> handleAddQ(currentQIndex)}>Add question BEFORE</button>
+                                <button className="bg-blue-900 rounded-md p-2 text-sm hover:bg-green-500" onClick={()=> handleAddQ(currentQIndex+1)}>Add question AFTER</button>
+                            </div>
+
                         </section>
 
                 </>) :
                 (<>
-                        <h3 className="text-center text-gray-300 pb-5">Q{currentQIndex + 1}: {quizInfo.questions[currentQIndex].question}</h3>
+                        <h3 className="text-center text-gray-300 pb-5">Q{currentQIndex + 1}: {updateInfo.questions[currentQIndex].question}</h3>
                         {randomArray[currentQIndex] === 1 ?
                             (<>
                                 <p className={`text-gray-100 hover:bg-gray-700 transition-colors duration-300 max-w-screen-sm ${score[currentQIndex] === 1 ? 'text-green-300' : attempted[currentQIndex] === 1 ? '' : ''}`} onClick={() => handleScore(currentQIndex, true)}>
-                                    A: {quizInfo.questions[currentQIndex].answer}
+                                    A: {updateInfo.questions[currentQIndex].answer}
                                 </p>
                                 <p className={`text-gray-100 hover:bg-gray-700 transition-colors duration-300 max-w-screen-sm ${score[currentQIndex] === 1 ? '' : attempted[currentQIndex] === 1 ? 'text-red-300' : ''}`} onClick={() => handleScore(currentQIndex, false)}>
-                                    A: {quizInfo.questions[currentQIndex].decoy}
+                                    A: {updateInfo.questions[currentQIndex].decoy}
                                 </p>
                             </>) : (<>
                                 <p className={`text-gray-100 hover:bg-gray-700 transition-colors duration-300 max-w-screen-sm ${score[currentQIndex] === 1 ? '' : attempted[currentQIndex] === 1 ? 'text-red-300' : ''}`} onClick={() => handleScore(currentQIndex, false)}>
-                                    A: {quizInfo.questions[currentQIndex].decoy}
+                                    A: {updateInfo.questions[currentQIndex].decoy}
                                 </p>
                                 <p className={`text-gray-100 hover:bg-gray-700 transition-colors duration-300 max-w-screen-sm ${score[currentQIndex] === 1 ? 'text-green-300' : attempted[currentQIndex] === 1 ? '' : ''}`} onClick={() => handleScore(currentQIndex, true)}>
-                                    A: {quizInfo.questions[currentQIndex].answer}
+                                    A: {updateInfo.questions[currentQIndex].answer}
                                 </p>
                             </>)
                         }
