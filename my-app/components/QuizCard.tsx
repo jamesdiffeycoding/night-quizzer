@@ -4,8 +4,6 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { useState } from "react";
-import DeleteQuizByIDButton from "./DeleteQuizByIdButton";
-import UpdateQuizByIdButton from "./UpdateQuizByIdButton";
 import {getCreationDay} from "../helper.js"
 
 

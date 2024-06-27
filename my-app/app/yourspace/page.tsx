@@ -2,7 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import QuizCard from "@/components/QuizCard";
 import BannerHeading from "@/components/BannerHeading";
-
+import TopBar from "@/components/TopBar";
 
 export default async function YourSpacePage() {
   const supabase = createClient();
@@ -17,6 +17,8 @@ export default async function YourSpacePage() {
 
   return (
     <>
+      <TopBar></TopBar>
+
       <BannerHeading heading="Your space"></BannerHeading>
       <QuizCard quizInfo={quizzes} userId={user.id}></QuizCard>
     </>

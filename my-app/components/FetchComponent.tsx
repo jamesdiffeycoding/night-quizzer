@@ -1,14 +1,5 @@
 "use client" 
-
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import DeleteQuizByIDButton from "./DeleteQuizByIdButton";
-import UpdateQuizByIdButton from "./UpdateQuizByIdButton";
-import QuizQuestion from "./QuizQuestion";
-import {getCreationDay} from "../helper.js"
-import Popup from "./Popup";
 
 export default function FetchComponent() {
     const [debug, setDebug] = useState("")
@@ -23,7 +14,7 @@ export default function FetchComponent() {
         };
         // Adjust the request body for specific methods if needed
         if (method === 'POST' || method === 'PATCH') {
-            request.body = JSON.stringify({ table: table, id: id, data: { title: "updatecode", description: "API", testcol: "test" } });
+            request.body = JSON.stringify({ table: table, id: id, data: { title: "updatecode", description: "API", testcol: "test"} });
         }
     
         try {
@@ -46,10 +37,8 @@ export default function FetchComponent() {
     }     
     return (
         <> 
-            <h1>TEST FUNCTIONS - {debug}</h1>
-                <div onClick={() => api("notes", "POST")}><span className="text-green-500">POST</span></div>
-                <div onClick={() => api("notes", "DELETE", "7")}><span className="text-red-500">DELETE</span></div>
-                <div onClick={() => api("notes", "PATCH", "8")}><span className="text-red-500">PUT</span></div>
+            <div onClick={() => api("notes", "POST")}><span className="text-green-500">POST</span></div>
+            <div onClick={() => api("notes", "PATCH", "3")}><span className="text-red-500">PUT</span></div>
         </>
     )
 }

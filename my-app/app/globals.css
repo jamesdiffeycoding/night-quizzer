@@ -25,6 +25,16 @@
     @apply border-foreground/20;
   }
 }
+/* global.css */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
 
 .animate-in {
   animation: animateIn 0.3s ease 0.15s both;

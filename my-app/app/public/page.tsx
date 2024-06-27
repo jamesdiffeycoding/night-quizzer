@@ -2,6 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import BannerHeading from "@/components/BannerHeading";
 import QuizCard from "@/components/QuizCard";
+import TopBar from "@/components/TopBar";
 export default async function DashPage() {
   const supabase = createClient();
   const {
@@ -16,6 +17,8 @@ export default async function DashPage() {
 
   return (
     <>
+      <TopBar></TopBar>
+
       <BannerHeading heading="All quizzes"></BannerHeading>
       <QuizCard quizInfo={quizzes} userId={user.id}></QuizCard>
     </>

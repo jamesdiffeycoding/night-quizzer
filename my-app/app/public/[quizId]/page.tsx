@@ -2,8 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
 import BannerHeading from "@/components/BannerHeading";
-import DeleteQuizByIDButton from "@/components/DeleteQuizByIdButton";
-
+import TopBar from "@/components/TopBar";
 export default async function DashPage({params}) {
   const quizId = params.quizId
   
@@ -21,6 +20,8 @@ export default async function DashPage({params}) {
 
   return (
     <>
+      <TopBar></TopBar>
+
       <BannerHeading heading="All quizzes"></BannerHeading>
 
       <div className="flex-1 w-full flex flex-col gap-20 items-center">
