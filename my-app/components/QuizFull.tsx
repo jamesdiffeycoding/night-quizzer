@@ -1,17 +1,32 @@
 "use client" 
-import _ from 'lodash'
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
+import _, { isBoolean } from 'lodash'
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ApiDeleteButton from "./ApiDeleteButton";
 import QuizQuestion from "./QuizQuestion";
-import {getCreationDay} from "../helper.js"
 import Popup from "./Popup";
 import ApiUpdateButton from "./ApiUpdateButton";
 import quizApi from '@/apiHelper';
 
-export default function QuizFull({ fetchedQuizData, userId }) {
+
+/* Define interface for fetched quiz data */
+interface FetchedQuizData {
+    id: number;
+    public: boolean;
+    created_at: string;
+    questions: {
+        decoy: string;
+        answer: string;
+        question: string;
+    }[];
+    user_id: string;
+    name: string;
+    globalPlays: string;
+    description: string;
+}
+
+
+export default function QuizFull({ fetchedQuizData, userId }: { fetchedQuizData: FetchedQuizData, userId: string }) {
     let quizLength = fetchedQuizData.questions.length
     const [score, setScore] = useState(Array(quizLength).fill(0))
     const [scoreNumber, setScoreNumber] = useState(0)
@@ -31,7 +46,7 @@ export default function QuizFull({ fetchedQuizData, userId }) {
     }, []);
     
     
-    function handleAttempt (index) {
+    function handleAttempt (index: number) {
         if (attempted[index] == 0) {
             let temporary = attempted
             temporary[index] = 1
@@ -39,7 +54,7 @@ export default function QuizFull({ fetchedQuizData, userId }) {
             setAttemptedNumber(temporary.reduce((total, currentValue) => total + currentValue, 0))
         }
     }
-    async function handleScore (index, isCorrect) {
+    async function handleScore (index: number, isCorrect: 'boolean') {
         if (isCorrect && attempted[index] == 0) {
             let temporary = score
             temporary[index] = 1
@@ -55,12 +70,12 @@ export default function QuizFull({ fetchedQuizData, userId }) {
             }, 3000); // 1000 milliseconds = 1 second
         }
     }
-    function handleNextQ (index) {
+    function handleNextQ () {
         if (currentQIndex < updatedQuizData.questions.length -1) {
             setCurrentQIndex(prev => prev+1)
         }
     }
-    function handlePreviousQ (index) {
+    function handlePreviousQ () {
         if (currentQIndex > 0) {
             setCurrentQIndex(prev => prev-1)
         }
@@ -68,7 +83,7 @@ export default function QuizFull({ fetchedQuizData, userId }) {
     function toggleDisplay () {
         setDisplayList(prev => !prev)
     }
-    function adjustResponseMessage(isCorrect, respectiveIndex) {
+    function adjustResponseMessage(isCorrect: 'boolean', respectiveIndex: number) {
         let temporary = responseMessage
         const correctMessages = ["Great job!", "You're on fire!", "Absolutely right!"];
         const incorrectMessages = ["Oops, try again!", "Not quite!", "Unlucky!"];
@@ -118,33 +133,32 @@ export default function QuizFull({ fetchedQuizData, userId }) {
     console.log("Update  -----: ", updatedQuizData)
 
 
-    function handleEditTyping(fieldType, newValue, questionIndex) {
+    function handleEditTyping(fieldType: string, newValue: any, questionIndex: number) {
         //One common reason for one field updates overriding another field updates when working with state is the order in which state updates are being processed. When updating state in React, changes are usually batched together. If you are updating state based on the previous state, it's important to make sure that you are working with the most up-to-date state.
         // To address this issue, you can modify the handleEditTyping function to use the functional form of setState, which allows you to update the state based on the previous state. This ensures that each update is independent and doesn't interfere with other field updates.
         setUpdateInfo(prevUpdateInfo => {
             const updatedQuizInfo = _.cloneDeep(prevUpdateInfo);
             switch (fieldType) {
+                case "public":
+                    if (typeof newValue === 'boolean') {
+                        updatedQuizInfo[fieldType] = newValue;
+                    }
+                    break;                    
                 case "name":
-                    updatedQuizInfo.name = newValue;
-                    break;
-                case "publicityToggle":
-                    updatedQuizInfo.public = !newValue; //there is a delay in the state rerendering that is passed to this function, so the ! operator helps.
-                    break;
                 case "description":
-                    updatedQuizInfo.description = newValue;
-                    break;
+                    if (typeof newValue === 'string') {
+                    updatedQuizInfo[fieldType] = newValue;
+                    }
+                    break;                    
                 case "question":
-                    updatedQuizInfo.questions[questionIndex].question = newValue;
+                case "answer":
+                case "decoy":
+                    if (typeof newValue === 'string') {
+                        updatedQuizInfo.questions[questionIndex][fieldType] = newValue;
+                    }
                     break;
-                case "correctAnswer":
-                    updatedQuizInfo.questions[questionIndex].answer = newValue;
-                    break;
-                case "decoyAnswer":
-                    updatedQuizInfo.questions[questionIndex].decoy = newValue;
-                    break;
-                default:
-                    // Handle any other fieldType if needed
-                    break;
+                    default:
+                break;
             }
             return updatedQuizInfo;
         });
@@ -156,7 +170,7 @@ export default function QuizFull({ fetchedQuizData, userId }) {
         return null; // Return null or handle the case where the question index is out of bounds
     }
 
-    function handleDeleteQ(index) {
+    function handleDeleteQ (index: number) {
         setUpdateInfo(prevUpdateInfo => {
             const updatedQuizInfo = _.cloneDeep(prevUpdateInfo);
 
@@ -166,7 +180,7 @@ export default function QuizFull({ fetchedQuizData, userId }) {
             return updatedQuizInfo;
         });
     }
-    function handleAddQ(index, viewQuestionAfter) {
+    function handleAddQ(index: number, viewQuestionAfter: boolean) {
         setUpdateInfo(prevUpdateInfo => {
             const updatedQuizInfo = _.cloneDeep(prevUpdateInfo);
 
@@ -181,7 +195,7 @@ export default function QuizFull({ fetchedQuizData, userId }) {
         setUpdateInfo(prevUpdateInfo => {
             const updatedQuizInfo = _.cloneDeep(prevUpdateInfo);
             let newCount = Number(updatedQuizInfo.globalPlays) +1
-            updatedQuizInfo.globalPlays = newCount
+            updatedQuizInfo.globalPlays = newCount.toString()
             quizApi("quizzes", "PATCH", updatedQuizData.id, updatedQuizInfo)
             return updatedQuizInfo;
         });
@@ -242,7 +256,7 @@ export default function QuizFull({ fetchedQuizData, userId }) {
                                         (<>
                                         {updatedQuizData.questions.map((prompt, index) => (                    
                                             <section key={index}>
-                                                <QuizQuestion handleDeleteQ={handleDeleteQ} handleAddQ={handleAddQ}updateMode={updateMode} randomArray={randomArray} attempted={attempted} currentQIndex={index} fetchedQuizData={fetchedQuizData} score={score} handleEditTyping={handleEditTyping} displayList={displayList} updatedQuizData={updatedQuizData}responseMessage={responseMessage} handleScore={handleScore}></QuizQuestion>
+                                                <QuizQuestion handleDeleteQ={handleDeleteQ} handleAddQ={handleAddQ} updateMode={updateMode} randomArray={randomArray} attempted={attempted} currentQIndex={index} fetchedQuizData={fetchedQuizData} score={score} handleEditTyping={handleEditTyping} displayList={displayList} updatedQuizData={updatedQuizData}responseMessage={responseMessage} handleScore={handleScore}></QuizQuestion>
                                             </section>
                                         ))}
                                     </>) : 

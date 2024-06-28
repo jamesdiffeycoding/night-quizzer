@@ -34,7 +34,7 @@ export default function QuizQuestion ({handleDeleteQ, handleAddQ, updateMode, di
                                     className={`text-gray-300 width-full bg-gray-700 hover:bg-gray-500 p-2 rounded-lg transition-colors duration-300 ${score[currentQIndex] === 1 ? 'text-green-300' : ''}`}
                                     />
                             </div>
-                            <div className="flex items-center justify-between bg-blue-900 rounded-lg cursor-pointer text-xs p-2" onClick={() => {changeQuizPublicity(); handleEditTyping("publicityToggle", quizPublicity); }}>
+                            <div className="flex items-center justify-between bg-blue-900 rounded-lg cursor-pointer text-xs p-2" onClick={() => {changeQuizPublicity(); handleEditTyping("public", !quizPublicity); }}>
                                 <span className="pr-2">Make public? Others will get to enjoy your quiz too.</span>
                                 <div className={`w-9 h-5 rounded-full p-1  ${quizPublicity ? 'bg-green-500' : 'bg-blue-500'}`}  >
                                     <div className={`w-3 h-3 bg-white rounded-full shadow-md transform ${quizPublicity ? 'translate-x-full' : ''}`}></div>
@@ -58,7 +58,7 @@ export default function QuizQuestion ({handleDeleteQ, handleAddQ, updateMode, di
                             <input
                                 type="text"
                                 value={updatedQuizData.questions[currentQIndex].answer}
-                                onChange={(e) => handleEditTyping("correctAnswer", e.target.value, currentQIndex)}
+                                onChange={(e) => handleEditTyping("answer", e.target.value, currentQIndex)}
                                 className={`text-green-300 width-full bg-gray-700 hover:bg-gray-500 p-2 rounded-lg transition-colors duration-300 ${score[currentQIndex] === 1 ? 'text-green-300' : ''}`}
                             />
                         </div>
@@ -69,7 +69,7 @@ export default function QuizQuestion ({handleDeleteQ, handleAddQ, updateMode, di
                             <input
                                 type="text"
                                 value={updatedQuizData.questions[currentQIndex].decoy}
-                                onChange={(e) => handleEditTyping("decoyAnswer", e.target.value, currentQIndex)}
+                                onChange={(e) => handleEditTyping("decoy", e.target.value, currentQIndex)}
                                 className={`text-red-300 bg-gray-700 hover:bg-gray-500 p-2 rounded-lg transition-colors duration-300 max-w-screen-sm ${score[currentQIndex] === 1 ? '' : attempted[currentQIndex] === 1 ? 'text-red-300' : ''}`}
                             />
                         </div>

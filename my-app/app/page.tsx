@@ -17,8 +17,15 @@ export default async function DashPage() {
     
   // FETCH QUIZ IDs TO FIND NUMBER OF QUIZZES MADE
 const { data: quizFinalId } = await supabase.from('quizzes').select('*').order('id', { ascending: false }).limit(1);
-let totalQuizNumber = quizFinalId[0].id
 
+
+/* Get the total quiz number*/
+let totalQuizNumber: number;
+if (quizFinalId !== null && quizFinalId.length > 0) {
+  totalQuizNumber = quizFinalId[0]?.id || 0;
+} else {
+  totalQuizNumber = 0; // Or any default value you prefer
+}
 
   return (
     <>
