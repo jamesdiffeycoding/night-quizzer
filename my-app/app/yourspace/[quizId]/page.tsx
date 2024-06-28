@@ -8,14 +8,17 @@ import TopBar from "@/components/TopBar";
 export default async function YourSpacePage({params}) {
     let quizId = params.quizId
   const supabase = createClient();
+  /* Allow user to complete public quizzes without loggin in. */
+  let userId = ""
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) {
-    return redirect("/login");
-  }
+  if (user) {
+    userId= user.id} else {
+      userId="No user logged in";
+    }
 
-  /* QUIZ FETCH REQUIREMENT: all your quizes */
+  /* QUIZ FETCH REQUIREMENT: any publically available quiz (or your quiz) */
   const { data: fetchedQuizData } = await supabase.from('quizzes').select().eq('id', `${quizId}`)
 
 
@@ -27,7 +30,7 @@ export default async function YourSpacePage({params}) {
       <div className="flex-1 w-full flex flex-col gap-20 items-center p-0 m-0">
           {/* CONDITION FOR SHOWING QUIZ: it exists */}        
           { fetchedQuizData.length !==0 ? 
-              <QuizFull fetchedQuizData={fetchedQuizData[0]} userId={user.id}></QuizFull> : <div>This quiz either no longer exists, or you do not have permission to view it.</div>
+              <QuizFull fetchedQuizData={fetchedQuizData[0]} userId={userId}></QuizFull> : <div>This quiz either no longer exists, or you do not have permission to view it.</div>
           }
       </div>
     </>

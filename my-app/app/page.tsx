@@ -5,12 +5,16 @@ import TopBar from "@/components/TopBar";
 
 export default async function DashPage() {
   const supabase = createClient();
+  /* Allow user to view public quizzes without loggin in. */
+  let userId = ""
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) {
-    return redirect("/login");
-  }
+  if (user) {
+    userId= user.id} else {
+      userId="No user logged in";
+    }
+    
   // FETCH QUIZ IDs TO FIND NUMBER OF QUIZZES MADE
 const { data: quizFinalId } = await supabase.from('quizzes').select('*').order('id', { ascending: false }).limit(1);
 let totalQuizNumber = quizFinalId[0].id

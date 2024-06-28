@@ -4,7 +4,10 @@ import { useEffect, useState } from "react";
 export default function FetchComponent() {
     const [debug, setDebug] = useState("")
     async function api(table, method, id) {
-        let url = `http://localhost:3001/api/quiz/${id ? id : ""}`;
+        let url = `https://quizzer-backend-api.onrender.com/api/quiz/${id ? id : ""}`;
+        // DEV VERSION
+        // let url = `http://localhost:3001/api/quiz/${id ? id : ""}`;
+    
         setDebug(`${method} called...`);
         let request = {
             method: method,
