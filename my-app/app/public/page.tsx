@@ -13,7 +13,7 @@ export default async function DashPage() {
   }
   const { data: notes } = await supabase.from('notes').select()
 
-  const { data: quizzes } = await supabase.from('quizzes').select().eq('private', 'false')
+  const { data: quizzes } = await supabase.from('quizzes').select().eq('public', 'true')
 
   return (
     <>

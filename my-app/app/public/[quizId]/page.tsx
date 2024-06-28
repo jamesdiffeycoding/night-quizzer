@@ -16,7 +16,7 @@ export default async function DashPage({params}) {
   }
 
   /* QUIZ FETCH REQUIREMENT: can be from any user id as long as it is NOT private */
-  const { data: fetchedQuizData } = await supabase.from('quizzes').select().eq('private', 'false').eq('id', `${quizId}`)
+  const { data: fetchedQuizData } = await supabase.from('quizzes').select().eq('public', 'true').eq('id', `${quizId}`)
 
   return (
     <>

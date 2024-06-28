@@ -107,8 +107,8 @@ export default function QuizFull({ fetchedQuizData, userId }) {
             setUpdateInfo(fetchedQuizData) // reset data back to original if updateMode cancelled
         }
     }
-    console.log("Quiz question info /////: ", fetchedQuizData.questions)
-    console.log("Update questions info -----: ", updatedQuizData.questions)
+    console.log("Quiz : ", fetchedQuizData)
+    console.log("Update  -----: ", updatedQuizData)
 
 
     function handleEditTyping(fieldType, newValue, questionIndex) {
@@ -119,6 +119,9 @@ export default function QuizFull({ fetchedQuizData, userId }) {
             switch (fieldType) {
                 case "name":
                     updatedQuizInfo.name = newValue;
+                    break;
+                case "publicityToggle":
+                    updatedQuizInfo.public = !newValue; //there is a delay in the state rerendering that is passed to this function, so the ! operator helps.
                     break;
                 case "description":
                     updatedQuizInfo.description = newValue;

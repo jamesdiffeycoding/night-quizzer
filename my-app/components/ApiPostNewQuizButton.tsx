@@ -18,7 +18,7 @@ export default function ApiPostNewQuizButton({quizId, userId}) {
    }
 
    const blankQuizWithId = {      
-      private: true,
+      public: false,
          questions: [
             {
                decoy: "Decoy",

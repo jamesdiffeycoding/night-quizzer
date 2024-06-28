@@ -2,7 +2,11 @@
 "use client"
 import { useEffect, useState } from "react"
 export default function QuizQuestion ({handleDeleteQ, handleAddQ, updateMode, displayList, randomArray, attempted, currentQIndex, responseMessage, handleScore, score, handleEditTyping, updatedQuizData}) {
-    
+    const [quizPublicity, setQuizPublicity] = useState(updatedQuizData.public)
+    function changeQuizPublicity () {
+        let temporary = !quizPublicity
+        setQuizPublicity(prev => temporary)
+    }
     return (
         <>
             <section className={`bg-gray-800 p-10 rounded-lg my-2 w-full min-w-fit ${score[currentQIndex] === 1 ? 'border border-4 border-solid border-green-200' : ''}`}>
@@ -19,6 +23,7 @@ export default function QuizQuestion ({handleDeleteQ, handleAddQ, updateMode, di
                                     className={`text-gray-300 width-full bg-gray-700 hover:bg-gray-500 p-2 rounded-lg transition-colors duration-300 ${score[currentQIndex] === 1 ? 'text-green-300' : ''}`}
                                     />
                             </div>
+
                             <div className="flex justify-between m-2 max-w-full">
                                 <p>Description: </p>
                                 
@@ -29,6 +34,12 @@ export default function QuizQuestion ({handleDeleteQ, handleAddQ, updateMode, di
                                     className={`text-gray-300 width-full bg-gray-700 hover:bg-gray-500 p-2 rounded-lg transition-colors duration-300 ${score[currentQIndex] === 1 ? 'text-green-300' : ''}`}
                                     />
                             </div>
+                            <div className="flex items-center justify-between bg-blue-900 rounded-lg cursor-pointer text-xs p-2" onClick={() => {changeQuizPublicity(); handleEditTyping("publicityToggle", quizPublicity); }}>
+                                <span className="pr-2">Make public? Others will get to enjoy your quiz too.</span>
+                                <div className={`w-9 h-5 rounded-full p-1  ${quizPublicity ? 'bg-green-500' : 'bg-blue-500'}`}  >
+                                    <div className={`w-3 h-3 bg-white rounded-full shadow-md transform ${quizPublicity ? 'translate-x-full' : ''}`}></div>
+                                </div>
+                            </div>    
                         </section>
                     )}
                     <section className="m-2 rounded-lg p-2">
