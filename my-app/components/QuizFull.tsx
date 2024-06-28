@@ -75,10 +75,10 @@ export default function QuizFull({ fetchedQuizData, userId }) {
         if(temporary[respectiveIndex] == "") {
             if (isCorrect) {
                 const randomIndex = Math.floor(Math.random() * correctMessages.length);
-              temporary[respectiveIndex] = correctMessages[randomIndex]
-              setResponseMessage(temporary);
+                temporary[respectiveIndex] = correctMessages[randomIndex]
+                setResponseMessage(temporary);
             } else {
-              const randomIndex = Math.floor(Math.random() * incorrectMessages.length);
+                const randomIndex = Math.floor(Math.random() * incorrectMessages.length);
               temporary[respectiveIndex] = incorrectMessages[randomIndex]
               setResponseMessage(temporary);
             }
@@ -95,6 +95,13 @@ export default function QuizFull({ fetchedQuizData, userId }) {
     
     
     
+    function resetProgress () {
+        setScore(Array(quizLength).fill(0))
+        setScoreNumber(0)
+        setAttempted(Array(quizLength).fill(false))
+        setAttemptedNumber(0)
+        setResponseMessage(Array(quizLength).fill(""))
+    }
     
     
     const [updateMode, setUpdateMode] = useState(false)
@@ -267,7 +274,7 @@ export default function QuizFull({ fetchedQuizData, userId }) {
             {/* QUIZ MANAGEMENT */}
                 {isUserQuizOwner ? (
                     <div className="flex justify-between">
-                        <ApiUpdateButton quizId={fetchedQuizData.id} handleUpdateToggle={handleUpdateToggle} updatedQuizData = {updatedQuizData}></ApiUpdateButton>
+                        <ApiUpdateButton quizId={fetchedQuizData.id} handleUpdateToggle={handleUpdateToggle} updatedQuizData = {updatedQuizData} resetProgress={resetProgress}></ApiUpdateButton>
                         <ApiDeleteButton quizId={fetchedQuizData.id}></ApiDeleteButton>
                     </div>
                     ):(<></>

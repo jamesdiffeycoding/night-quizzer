@@ -76,7 +76,7 @@ export default function QuizQuestion ({handleDeleteQ, handleAddQ, updateMode, di
                         <div className="text-center text-gray-400">{responseMessage[currentQIndex]}</div>
                         </section>
                         <section className="flex justify-between w-full">
-                            <button className="bg-blue-900 rounded-md p-2 text-sm hover:bg-red-500" onClick={()=> handleDeleteQ(currentQIndex)}>Delete this question</button>
+                            <button className="bg-blue-900 rounded-md p-2 text-sm hover:bg-red-500 mr-2" onClick={()=> handleDeleteQ(currentQIndex)}>Delete this question</button>
                             <div className="flex">
                                 <button className="bg-blue-900 rounded-md p-2 text-sm hover:bg-green-500 mr-2" onClick={()=> handleAddQ(currentQIndex, false)}>Add question BEFORE</button>
                                 <button className="bg-blue-900 rounded-md p-2 text-sm hover:bg-green-500" onClick={()=> handleAddQ(currentQIndex+1, true)}>Add question AFTER</button>

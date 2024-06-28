@@ -23,7 +23,7 @@ export default function QuizCard({ fetchedQuizData, userId }) {
                         </h2>
                         <p className="text-gray-600">{quiz.description}</p>
                         <p className="text-gray-400">Made: {getCreationDay(quiz.created_at)}</p>
-                        <p className="text-gray-400 mb-2">Plays: {quiz.playsCount}</p>
+                        <p className="text-gray-400 mb-2">Plays: {quiz.globalPlays}</p>
                         <Link className="bg-blue-900 rounded-md p-2 text-sm" href={`/yourspace/${quiz.id}`}>{userId == quiz.user_id ?("Play or manage this quiz"):("Play this quiz")}</Link>
                     </div>
                 ))}

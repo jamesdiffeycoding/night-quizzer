@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { useState } from "react";
 import quizApi from "../apiHelper";
 
-export default function ApiUpdateButton({quizId, handleUpdateToggle, updatedQuizData}) {
+export default function ApiUpdateButton({quizId, handleUpdateToggle, updatedQuizData, resetProgress}) {
    const [confirmation, setConfirmation] = useState(false);
    const [delay, setDelay] = useState(false)
 
@@ -15,6 +15,7 @@ export default function ApiUpdateButton({quizId, handleUpdateToggle, updatedQuiz
         setDelay(true);
      }, 3000); // 3000 milliseconds = 3 seconds
      handleUpdateToggle()
+     resetProgress()
    }
 
    return (
