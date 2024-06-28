@@ -29,7 +29,7 @@ let totalQuizNumber = quizFinalId[0].id
         <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3 mt-5">
           <h2 className="text-3xl font-bold">JOIN THE REVOLUTION</h2>
           <div>{totalQuizNumber} quizzes have been made so far.</div>
-          <div>Join us at dark-quizzer.</div>
+          <div>Join us at Night quizzer.</div>
           <ul className="list-disc pl-4">
             <li>Create your own free private or public quizzes.</li>
             <li>Update your quizzes over time.</li>
