@@ -5,9 +5,10 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { useState } from "react";
 import {getCreationDay} from "../helper.js"
+import { Quiz } from "@/app/interfaces.js";
 
 
-export default function QuizCard({ fetchedQuizData, userId }) {
+export default function QuizCard({ fetchedQuizData = [], userId }: { fetchedQuizData: Quiz[], userId: string }) {
     const [play, setPlay] = useState(false);
 
     return (

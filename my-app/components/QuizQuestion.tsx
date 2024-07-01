@@ -1,15 +1,16 @@
 
 "use client"
 import { useEffect, useState } from "react"
+//@ts-ignore
 export default function QuizQuestion ({handleDeleteQ, handleAddQ, updateMode, displayList, randomArray, attempted, currentQIndex, responseMessage, handleScore, score, handleEditTyping, updatedQuizData}) {
     const [quizPublicity, setQuizPublicity] = useState(updatedQuizData.public)
     function changeQuizPublicity () {
         let temporary = !quizPublicity
-        setQuizPublicity(prev => temporary)
+        setQuizPublicity((prev: boolean) => temporary);
     }
     return (
         <>
-            <section className={`bg-gray-800 p-10 rounded-lg my-2 w-full min-w-fit ${score[currentQIndex] === 1 ? 'border border-4 border-solid border-green-200' : ''}`}>
+            <section className={`bg-gray-800 p-10 rounded-lg my-2 w-full min-w-fit ${score[currentQIndex] === 1 ? 'border-4 border-solid border-green-200' : ''}`}>
             {updateMode ?
                 (<>
                     {displayList && currentQIndex !== 0 ? (<></>):(

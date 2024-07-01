@@ -7,26 +7,10 @@ import QuizQuestion from "./QuizQuestion";
 import Popup from "./Popup";
 import ApiUpdateButton from "./ApiUpdateButton";
 import quizApi from '@/apiHelper';
+import { Quiz } from '@/app/interfaces';
 
-
-/* Define interface for fetched quiz data */
-interface FetchedQuizData {
-    id: number;
-    public: boolean;
-    created_at: string;
-    questions: {
-        decoy: string;
-        answer: string;
-        question: string;
-    }[];
-    user_id: string;
-    name: string;
-    globalPlays: string;
-    description: string;
-}
-
-
-export default function QuizFull({ fetchedQuizData, userId }: { fetchedQuizData: FetchedQuizData, userId: string }) {
+export default function QuizFull({ fetchedQuizData, userId }: { fetchedQuizData: Quiz, userId: string }) {
+    console.log("fetched quiz: ", fetchedQuizData)
     let quizLength = fetchedQuizData.questions.length
     const [score, setScore] = useState(Array(quizLength).fill(0))
     const [scoreNumber, setScoreNumber] = useState(0)
@@ -131,11 +115,10 @@ export default function QuizFull({ fetchedQuizData, userId }: { fetchedQuizData:
     }
     console.log("Quiz : ", fetchedQuizData)
     console.log("Update  -----: ", updatedQuizData)
+    
 
 
     function handleEditTyping(fieldType: string, newValue: any, questionIndex: number) {
-        //One common reason for one field updates overriding another field updates when working with state is the order in which state updates are being processed. When updating state in React, changes are usually batched together. If you are updating state based on the previous state, it's important to make sure that you are working with the most up-to-date state.
-        // To address this issue, you can modify the handleEditTyping function to use the functional form of setState, which allows you to update the state based on the previous state. This ensures that each update is independent and doesn't interfere with other field updates.
         setUpdateInfo(prevUpdateInfo => {
             const updatedQuizInfo = _.cloneDeep(prevUpdateInfo);
             switch (fieldType) {
@@ -200,7 +183,20 @@ export default function QuizFull({ fetchedQuizData, userId }: { fetchedQuizData:
             return updatedQuizInfo;
         });
     }
-    
+    // ------------------------------------------- -----------------------------------------------------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------- -----------------------------------------------------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------- -----------------------------------------------------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------- -----------------------------------------------------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------- -----------------------------------------------------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------- -----------------------------------------------------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------- -----------------------------------------------------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------- -----------------------------------------------------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------- -----------------------------------------------------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------- -----------------------------------------------------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------- -----------------------------------------------------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------- -----------------------------------------------------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------- -----------------------------------------------------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------- -----------------------------------------------------------------------------------------------------------------------------------------------------------
     return (
         <> 
             {/* PROGRESS BAR */}
@@ -256,13 +252,14 @@ export default function QuizFull({ fetchedQuizData, userId }: { fetchedQuizData:
                                         (<>
                                         {updatedQuizData.questions.map((prompt, index) => (                    
                                             <section key={index}>
+                                                {/* @ts-ignore */}
                                                 <QuizQuestion handleDeleteQ={handleDeleteQ} handleAddQ={handleAddQ} updateMode={updateMode} randomArray={randomArray} attempted={attempted} currentQIndex={index} fetchedQuizData={fetchedQuizData} score={score} handleEditTyping={handleEditTyping} displayList={displayList} updatedQuizData={updatedQuizData}responseMessage={responseMessage} handleScore={handleScore}></QuizQuestion>
                                             </section>
                                         ))}
                                     </>) : 
                                 // INDIVIDUAL QS ----------------------------------------------------------------------------
-                                (<>
-                                    <QuizQuestion handleDeleteQ={handleDeleteQ} handleAddQ={handleAddQ}updateMode={updateMode} randomArray={randomArray} attempted={attempted} currentQIndex={currentQIndex} fetchedQuizData={fetchedQuizData} score={score} handleEditTyping={handleEditTyping} displayList={displayList} updatedQuizData={updatedQuizData}responseMessage={responseMessage} handleScore={handleScore}></QuizQuestion>
+                                //@ts-ignore
+                                (<> <QuizQuestion handleDeleteQ={handleDeleteQ} handleAddQ={handleAddQ}updateMode={updateMode} randomArray={randomArray} attempted={attempted} currentQIndex={currentQIndex} fetchedQuizData={fetchedQuizData} score={score} handleEditTyping={handleEditTyping} displayList={displayList} updatedQuizData={updatedQuizData}responseMessage={responseMessage} handleScore={handleScore}></QuizQuestion>
                                     {/* PREVIOUS AND NEXT BUTTONS------------------------------------------------------------------------------------------------------------------------------------- */}
                                     <section className="flex justify-between w-full">
                                         { currentQIndex !== 0 ? 
