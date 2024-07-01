@@ -21,9 +21,12 @@ export default function QuizCard({ fetchedQuizData, userId }) {
                             </span>
                                 {" " + quiz.name}
                         </h2>
-                        <p className="text-gray-600">{quiz.description}</p>
-                        <p className="text-gray-400">Made: {getCreationDay(quiz.created_at)}</p>
-                        <p className="text-gray-400 mb-2">Plays: {quiz.globalPlays}</p>
+                        <p className="text-gray-300">{quiz.description}</p>
+                        <div className="grid grid-cols-3 mt-2 mb-2">
+                            <span className="text-gray-400"><strong>Questions:</strong> {quiz.questions.length}</span>
+                            <span className="text-gray-400 text-center"><strong>Made:</strong> {getCreationDay(quiz.created_at)}</span>
+                            <span className="text-gray-400 mb-2 text-right"><strong>Plays:</strong> {quiz.globalPlays}</span>
+                        </div>
                         <Link className="bg-blue-900 rounded-md p-2 text-sm" href={`/yourspace/${quiz.id}`}>{userId == quiz.user_id ?("Play or manage this quiz"):("Play this quiz")}</Link>
                     </div>
                 ))}

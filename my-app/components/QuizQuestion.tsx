@@ -26,7 +26,6 @@ export default function QuizQuestion ({handleDeleteQ, handleAddQ, updateMode, di
 
                             <div className="flex justify-between m-2 max-w-full">
                                 <p>Description: </p>
-                                
                                 <input
                                     type="text"
                                     value={updatedQuizData.description}

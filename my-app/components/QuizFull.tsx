@@ -224,10 +224,10 @@ export default function QuizFull({ fetchedQuizData, userId }: { fetchedQuizData:
                 (<>
                     <div className="animate-in flex-1 flex flex-col gap-5 opacity-0 px-3 mt-5 mb-5 max-w-screen-lg w-5/6 min-w-fit">
                             <div key={updatedQuizData.id} className="shadow-md rounded-lg p-4 m-2 border border-blue-300">
-                                <section className="flex justify-between">
                                     <h2 className="text-xl font-bold mb-4">{updatedQuizData.name}
                                         <p className="text-sm font-normal">{updatedQuizData.description}</p>
                                     </h2>
+                                <section className="flex justify-between">
 
                                     <div className="flex items-center justify-right bg-blue-900 rounded-lg cursor-pointer text-xs p-2" onClick={toggleDisplay}>
                                         <span className="pr-2">List view </span>
@@ -241,9 +241,9 @@ export default function QuizFull({ fetchedQuizData, userId }: { fetchedQuizData:
                                             <div>Questions: {updatedQuizData.questions.length}</div>
                                         </div>     
                                     ): (
-                                        <div>
-                                            <div>Score: {scoreNumber} / {quizLength}</div>
-                                            <div>Qs remaining: {quizLength - attemptedNumber}</div>
+                                        <div className="text-gray-400">
+                                            <div><strong>Score: </strong>{scoreNumber} / {quizLength}</div>
+                                            <div><strong>Qs remaining: </strong>{quizLength - attemptedNumber}</div>
                                         </div>
                                     )}
                                 </section>
