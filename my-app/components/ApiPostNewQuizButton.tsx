@@ -18,9 +18,9 @@ export default function ApiPostNewQuizButton({quizId, userId}: {quizId: number, 
             }
          ],
          user_id: userId,
-         name: "Name",
+         name: "😊 New, private quiz",
          globalPlays: "0",
-         description: "A quiz about ___"
+         description: ""
    }
    
 
