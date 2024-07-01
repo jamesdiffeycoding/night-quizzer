@@ -17,22 +17,14 @@ export default function QuizQuestion ({handleDeleteQ, handleAddQ, updateMode, di
                         <section className="bg-black m-2 rounded-lg p-2">
                             <div className="flex justify-between m-2">
                                 <p>Name of quiz: </p>
-                                <input
-                                    type="text"
-                                    value={updatedQuizData.name}
-                                    onChange={(e) => handleEditTyping("name", e.target.value, currentQIndex)}
-                                    className={`text-gray-300 width-full bg-gray-700 hover:bg-gray-500 p-2 rounded-lg transition-colors duration-300 ${score[currentQIndex] === 1 ? 'text-green-300' : ''}`}
-                                    />
+                                {/* @ts-ignore */}                                    
+                                <input type="text" value={updatedQuizData.name} onChange={(e) => handleEditTyping("name", e.target.value, currentQIndex)} className={`text-gray-300 width-full bg-gray-700 hover:bg-gray-500 p-2 rounded-lg transition-colors duration-300 ${score[currentQIndex] === 1 ? 'text-green-300' : ''}`} />
                             </div>
 
                             <div className="flex justify-between m-2 max-w-full">
                                 <p>Description: </p>
-                                <input
-                                    type="text"
-                                    value={updatedQuizData.description}
-                                    onChange={(e) => handleEditTyping("description", e.target.value, currentQIndex)}
-                                    className={`text-gray-300 width-full bg-gray-700 hover:bg-gray-500 p-2 rounded-lg transition-colors duration-300 ${score[currentQIndex] === 1 ? 'text-green-300' : ''}`}
-                                    />
+                                {/* @ts-ignore */}                                    
+                                <input type="text" value={updatedQuizData.description} onChange={(e) => handleEditTyping("description", e.target.value, currentQIndex)} className={`text-gray-300 width-full bg-gray-700 hover:bg-gray-500 p-2 rounded-lg transition-colors duration-300 ${score[currentQIndex] === 1 ? 'text-green-300' : ''}`} />
                             </div>
                             <div className="flex items-center justify-between bg-blue-900 rounded-lg cursor-pointer text-xs p-2" onClick={() => {changeQuizPublicity(); handleEditTyping("public", !quizPublicity); }}>
                                 <span className="pr-2">Make public? Others will get to enjoy your quiz too.</span>
@@ -46,36 +38,24 @@ export default function QuizQuestion ({handleDeleteQ, handleAddQ, updateMode, di
 
                         <div className="flex justify-between m-2">
                             <p>Question {currentQIndex + 1}:</p>
-                            <input
-                                type="text"
-                                value={updatedQuizData.questions[currentQIndex].question}
-                                onChange={(e) => handleEditTyping("question", e.target.value, currentQIndex)}
-                                className={`text-gray-300 width-full bg-gray-700 hover:bg-gray-500 p-2 rounded-lg transition-colors duration-300 ${score[currentQIndex] === 1 ? 'text-green-300' : ''}`}
-                            />
+                            {/* @ts-ignore */}
+                            <input type="text" value={updatedQuizData.questions[currentQIndex].question} onChange={(e) => handleEditTyping("question", e.target.value, currentQIndex)} className={`text-gray-300 width-full bg-gray-700 hover:bg-gray-500 p-2 rounded-lg transition-colors duration-300 ${score[currentQIndex] === 1 ? 'text-green-300' : ''}`} />
                         </div>
                         <div className="flex justify-between m-2">
                             <p>Correct answer: </p>
-                            <input
-                                type="text"
-                                value={updatedQuizData.questions[currentQIndex].answer}
-                                onChange={(e) => handleEditTyping("answer", e.target.value, currentQIndex)}
-                                className={`text-green-300 width-full bg-gray-700 hover:bg-gray-500 p-2 rounded-lg transition-colors duration-300 ${score[currentQIndex] === 1 ? 'text-green-300' : ''}`}
-                            />
+                            {/* @ts-ignore */}
+                            <input type="text" value={updatedQuizData.questions[currentQIndex].answer} onChange={(e) => handleEditTyping("answer", e.target.value, currentQIndex)} className={`text-green-300 width-full bg-gray-700 hover:bg-gray-500 p-2 rounded-lg transition-colors duration-300 ${score[currentQIndex] === 1 ? 'text-green-300' : ''}`} />
                         </div>
 
                         <div className="flex justify-between m-2">
                             <p>Decoy answer: </p>
-
-                            <input
-                                type="text"
-                                value={updatedQuizData.questions[currentQIndex].decoy}
-                                onChange={(e) => handleEditTyping("decoy", e.target.value, currentQIndex)}
-                                className={`text-red-300 bg-gray-700 hover:bg-gray-500 p-2 rounded-lg transition-colors duration-300 max-w-screen-sm ${score[currentQIndex] === 1 ? '' : attempted[currentQIndex] === 1 ? 'text-red-300' : ''}`}
-                            />
+                            {/* @ts-ignore */}
+                            <input type="text" value={updatedQuizData.questions[currentQIndex].decoy} onChange={(e) => handleEditTyping("decoy", e.target.value, currentQIndex)} className={`text-red-300 bg-gray-700 hover:bg-gray-500 p-2 rounded-lg transition-colors duration-300 max-w-screen-sm ${score[currentQIndex] === 1 ? '' : attempted[currentQIndex] === 1 ? 'text-red-300' : ''}`} />
                         </div>
                         <div className="text-center text-gray-400">{responseMessage[currentQIndex]}</div>
                         </section>
                         <section className="flex justify-between w-full">
+                            {/* @ts-ignore */}
                             <button className="bg-blue-900 rounded-md p-2 text-sm hover:bg-red-500 mr-2" onClick={()=> handleDeleteQ(currentQIndex)}>Delete this question</button>
                             <div className="flex">
                                 <button className="bg-blue-900 rounded-md p-2 text-sm hover:bg-green-500 mr-2" onClick={()=> handleAddQ(currentQIndex, false)}>Add question BEFORE</button>
