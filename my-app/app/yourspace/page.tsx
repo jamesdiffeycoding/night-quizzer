@@ -20,7 +20,9 @@ export default async function YourSpacePage() {
       <TopBar></TopBar>
 
       <BannerHeading heading="Your space"></BannerHeading>
+      {/* @ts-ignore */}
       <QuizCard fetchedQuizData={fetchedQuizData} userId={user.id}></QuizCard>
+      {/* @ts-ignore */}
       <ApiPostNewQuizButton userId={user.id}></ApiPostNewQuizButton>
     </>
   );
