@@ -24,6 +24,7 @@ export default async function DashPage() {
       <TopBar></TopBar>
 
       <BannerHeading heading="All quizzes"></BannerHeading>
+      {/* @ts-ignore */}
       <QuizCard fetchedQuizData={quizzes} userId={userId}></QuizCard>
     </>
   );
