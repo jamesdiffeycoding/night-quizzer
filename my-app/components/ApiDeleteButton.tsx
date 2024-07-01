@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { useState } from "react";
 import quizApi from "../apiHelper";
 
-export default function ApiDeleteButton({quizId}) {
+export default function ApiDeleteButton({quizId}: {quizId: number}) {
    const [confirmation, setConfirmation] = useState(false);
    const [delay, setDelay] = useState(false)
 
