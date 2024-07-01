@@ -4,18 +4,9 @@ import { redirect } from "next/navigation";
 import { useState } from "react";
 import quizApi from "../apiHelper";
 
-export default function ApiPostNewQuizButton({quizId, userId}) {
+export default function ApiPostNewQuizButton({quizId, userId}: {quizId: number, userId: string}) {
    const [confirmation, setConfirmation] = useState(false);
    const [delay, setDelay] = useState(false)
-
-   function handleUpdateClick() {
-      let temporary = !confirmation
-      setConfirmation(temporary);
-      setTimeout(() => {
-        setDelay(true);
-     }, 3000); // 3000 milliseconds = 3 seconds
-     handleUpdateToggle()
-   }
 
    const blankQuizWithId = {      
       public: false,
