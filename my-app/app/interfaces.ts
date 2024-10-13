@@ -28,10 +28,3 @@ export interface QuizQuestionProps {
     handleEditTyping: (event: React.ChangeEvent<HTMLInputElement>) => void;
     updatedQuizData: any; // Update this type to match the actual type
 }
-
-export interface TopBarLinkProps {
-    name: string;
-    link: string;
-    current?: string; // Make 'current' prop optional
-  }
-  

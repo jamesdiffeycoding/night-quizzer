@@ -11,6 +11,7 @@ npm start: runs the built app in production mode
 npm run dev: runs in local
 
 
+
 # useful tools 
 Supabase table editor
 

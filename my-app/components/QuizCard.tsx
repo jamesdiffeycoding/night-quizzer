@@ -7,7 +7,7 @@ import { useState } from "react";
 import {getCreationDay} from "../helper.js"
 import { Quiz } from "@/app/interfaces.js";
 
-
+{/* @ts-ignore */}
 export default function QuizCard({ fetchedQuizData = [], userId }: { fetchedQuizData: Quiz[], userId: string }) {
     const [play, setPlay] = useState(false);
 
