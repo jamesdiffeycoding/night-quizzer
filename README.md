@@ -1,5 +1,6 @@
 # Night Quizzer
 
+
 ## Inspiration
 Many online quiz sites are overly bright, ad-filled, and overstimulating for people with light sensitivity.
 
